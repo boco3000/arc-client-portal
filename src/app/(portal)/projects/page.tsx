@@ -1,26 +1,37 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { projects } from "@/data/projects";
-import { getStatusParam, getStringParam } from "@/lib/query";
+import { getSortParam, getStatusParam, getStringParam } from "@/lib/query";
+import { ProjectsFilters } from "@/components/projects/ProjectsFilters";
+
+export const dynamic = "force-dynamic";
+
+type SearchParams = Record<string, string | string[] | undefined>;
 
 type PageProps = {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams?: Promise<SearchParams>;
 };
 
-export default function ProjectsPage({ searchParams }: PageProps) {
-  const q = getStringParam(searchParams?.q).trim().toLowerCase();
-  const status = getStatusParam(searchParams?.status);
+export default async function ProjectsPage({ searchParams }: PageProps) {
+  const sp = (await searchParams) ?? {};
+
+  const q = getStringParam(sp.q).trim().toLowerCase();
+  const status = getStatusParam(sp.status);
+  const sort = getSortParam(sp.sort);
 
   const filtered = projects
     .filter((p) => {
       if (status !== "all" && p.status !== status) return false;
       if (!q) return true;
       return (
-        p.name.toLowerCase().includes(q) ||
-        p.client.toLowerCase().includes(q)
+        p.name.toLowerCase().includes(q) || p.client.toLowerCase().includes(q)
       );
     })
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    .sort((a, b) => {
+      if (sort === "name") return a.name.localeCompare(b.name);
+      if (sort === "due") return a.dueDate.localeCompare(b.dueDate);
+      return b.updatedAt.localeCompare(a.updatedAt); // "updated"
+    });
 
   return (
     <section className="space-y-6">
@@ -31,58 +42,49 @@ export default function ProjectsPage({ searchParams }: PageProps) {
         </p>
       </header>
 
-      {/* Filters (simple links first; we’ll upgrade to real inputs next) */}
       <Card>
         <CardHeader>
           <CardTitle>Filters</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-2 text-sm">
-          <FilterPill href="/projects" active={status === "all" && !q}>
-            All
-          </FilterPill>
-          <FilterPill href={buildHref({ status: "active", q })} active={status === "active"}>
-            Active
-          </FilterPill>
-          <FilterPill href={buildHref({ status: "review", q })} active={status === "review"}>
-            Review
-          </FilterPill>
-          <FilterPill href={buildHref({ status: "paused", q })} active={status === "paused"}>
-            Paused
-          </FilterPill>
-          <FilterPill
-            href={buildHref({ status: "completed", q })}
-            active={status === "completed"}
-          >
-            Completed
-          </FilterPill>
-
-          {/* Quick search presets for now (real search input next step) */}
-          <div className="ml-auto flex gap-2">
-            <FilterPill href={buildHref({ status, q: "northwind" })} active={q === "northwind"}>
-              Northwind
-            </FilterPill>
-            <FilterPill href={buildHref({ status, q: "" })} active={!q}>
-              Clear search
-            </FilterPill>
-          </div>
+        <CardContent>
+          <ProjectsFilters />
         </CardContent>
       </Card>
 
-      {/* Table */}
       <Card>
         <CardHeader>
           <CardTitle>
-            Results <span className="text-neutral-500">({filtered.length})</span>
+            Results{" "}
+            <span className="text-neutral-500">({filtered.length})</span>
           </CardTitle>
+          <p className="mt-1 text-xs text-neutral-500">
+            {status === "all" ? "All statuses" : `Status: ${status}`}
+            {q ? ` • Query: “${q}”` : ""}
+            {sort !== "updated" ? ` • Sort: ${sort}` : ""}
+          </p>
         </CardHeader>
 
         <CardContent>
           {filtered.length === 0 ? (
-            <div className="rounded-lg border border-white/10 p-6 text-sm text-neutral-400">
-              No projects match your filters.
+            <div className="rounded-lg border border-white/10 p-6 text-sm">
+              <p className="text-neutral-200">
+                No projects match your filters.
+              </p>
+              <p className="mt-1 text-neutral-500">
+                Try a different status, adjust your search, or clear filters.
+              </p>
+
+              <div className="mt-4">
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 hover:bg-white/10"
+                >
+                  Clear filters
+                </Link>
+              </div>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="-mx-2 overflow-x-auto px-2">
               <table className="w-full text-sm">
                 <thead className="text-left text-neutral-400">
                   <tr className="border-b border-white/10">
@@ -96,11 +98,14 @@ export default function ProjectsPage({ searchParams }: PageProps) {
 
                 <tbody>
                   {filtered.map((p) => (
-                    <tr key={p.id} className="border-b border-white/5">
+                    <tr
+                      key={p.id}
+                      className="border-b border-white/5 hover:bg-white/[0.03]"
+                    >
                       <td className="py-3 pr-4">
                         <Link
                           href={`/projects/${p.id}`}
-                          className="text-neutral-200 hover:text-white underline-offset-4 hover:underline"
+                          className="block rounded-sm text-neutral-200 underline-offset-4 hover:underline hover:text-white outline-none focus:ring-2 focus:ring-white/20"
                         >
                           {p.name}
                         </Link>
@@ -109,7 +114,9 @@ export default function ProjectsPage({ searchParams }: PageProps) {
                       <td className="py-3 pr-4">
                         <StatusBadge status={p.status} />
                       </td>
-                      <td className="py-3 pr-4 text-neutral-400">{p.dueDate}</td>
+                      <td className="py-3 pr-4 text-neutral-400">
+                        {p.dueDate}
+                      </td>
                       <td className="py-3 text-neutral-400">{p.updatedAt}</td>
                     </tr>
                   ))}
@@ -123,46 +130,25 @@ export default function ProjectsPage({ searchParams }: PageProps) {
   );
 }
 
-function buildHref({
-  status,
-  q,
-}: {
-  status: string;
-  q: string;
-}) {
-  const params = new URLSearchParams();
-  if (status && status !== "all") params.set("status", status);
-  if (q) params.set("q", q);
-  const s = params.toString();
-  return s ? `/projects?${s}` : "/projects";
-}
+function StatusBadge({ status }: { status: string }) {
+  const styles =
+    status === "active"
+      ? "bg-white/10 text-white"
+      : status === "review"
+        ? "bg-white/5 text-neutral-100"
+        : status === "paused"
+          ? "bg-neutral-900 text-neutral-300"
+          : status === "completed"
+            ? "bg-neutral-950 text-neutral-400"
+            : "bg-white/5 text-neutral-200";
 
-function FilterPill({
-  href,
-  active,
-  children,
-}: {
-  href: string;
-  active: boolean;
-  children: React.ReactNode;
-}) {
   return (
-    <Link
-      href={href}
+    <span
       className={[
-        "inline-flex items-center rounded-md px-3 py-1.5 transition",
-        "border border-white/10",
-        active ? "bg-white/10 text-white" : "text-neutral-300 hover:bg-white/5",
+        "inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs",
+        styles,
       ].join(" ")}
     >
-      {children}
-    </Link>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className="inline-flex rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-neutral-200">
       {status}
     </span>
   );

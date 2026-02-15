@@ -15,3 +15,13 @@ export function getStatusParam(
   if (allowed.has(v)) return v as ProjectStatus;
   return "all";
 }
+
+export type ProjectSort = "updated" | "due" | "name";
+
+export function getSortParam(
+  value: string | string[] | undefined
+): ProjectSort {
+  const v = getStringParam(value).toLowerCase();
+  if (v === "due" || v === "name" || v === "updated") return v;
+  return "updated";
+}
