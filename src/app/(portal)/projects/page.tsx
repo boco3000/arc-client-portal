@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { projects } from "@/data/projects";
 import { getSortParam, getStatusParam, getStringParam } from "@/lib/query";
 import { ProjectsFilters } from "@/components/projects/ProjectsFilters";
+import { getProjectStatus } from "@/lib/projectStore";
+import { ProjectsTable } from "@/components/projects/ProjectsTable";
 
 export const dynamic = "force-dynamic";
 
@@ -85,43 +87,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
             </div>
           ) : (
             <div className="-mx-2 overflow-x-auto px-2">
-              <table className="w-full text-sm">
-                <thead className="text-left text-neutral-400">
-                  <tr className="border-b border-white/10">
-                    <th className="py-3 pr-4 font-medium">Project</th>
-                    <th className="py-3 pr-4 font-medium">Client</th>
-                    <th className="py-3 pr-4 font-medium">Status</th>
-                    <th className="py-3 pr-4 font-medium">Due</th>
-                    <th className="py-3 font-medium">Updated</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {filtered.map((p) => (
-                    <tr
-                      key={p.id}
-                      className="border-b border-white/5 hover:bg-white/[0.03]"
-                    >
-                      <td className="py-3 pr-4">
-                        <Link
-                          href={`/projects/${p.id}`}
-                          className="block rounded-sm text-neutral-200 underline-offset-4 hover:underline hover:text-white outline-none focus:ring-2 focus:ring-white/20"
-                        >
-                          {p.name}
-                        </Link>
-                      </td>
-                      <td className="py-3 pr-4 text-neutral-400">{p.client}</td>
-                      <td className="py-3 pr-4">
-                        <StatusBadge status={p.status} />
-                      </td>
-                      <td className="py-3 pr-4 text-neutral-400">
-                        {p.dueDate}
-                      </td>
-                      <td className="py-3 text-neutral-400">{p.updatedAt}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <ProjectsTable rows={filtered} />
             </div>
           )}
         </CardContent>
