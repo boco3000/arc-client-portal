@@ -31,13 +31,21 @@ export function ProjectActions({
   function onChangeStatus(next: ProjectStatus) {
     startTransition(() => {
       setOptimisticStatus(next);
-      setStatus(projectId, next); // ✅ updates list page instantly too
+      setStatus(projectId, next);
+
+      addActivity({
+        id: crypto.randomUUID(),
+        projectId,
+        title: `Status changed to ${next}`,
+        meta: "System • Status update",
+        date: new Date().toISOString().slice(0, 10),
+      });
 
       void updateProjectStatusAction({ id: projectId, status: next });
     });
   }
 
-  const { setStatus } = usePortalState();
+  const { setStatus, addActivity } = usePortalState();
 
   return (
     <div className="space-y-3">

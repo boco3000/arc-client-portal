@@ -2,11 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { projects } from "@/data/projects";
-import { projectActivity } from "@/data/projectActivity";
 import type { ProjectStatus } from "@/data/projects";
 import { getProjectStatus } from "@/lib/projectStore";
 import { ProjectActions } from "@/components/projects/ProjectActions";
 import { BackToProjectsButton } from "@/components/projects/BackToProjectsButton";
+import { ProjectActivity } from "@/components/projects/ProjectActivity";
+import { ProjectNotes } from "@/components/projects/ProjectNotes";
+import { ProjectInvoices } from "@/components/projects/ProjectInvoices";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -19,10 +21,6 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   if (!project) return notFound();
 
   const effectiveStatus = getProjectStatus(project.id, project.status);
-
-  const activity = projectActivity
-    .filter((e) => e.projectId === project.id)
-    .sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <section className="space-y-6">
@@ -59,31 +57,19 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               <CardTitle>Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              {activity.length === 0 ? (
-                <p className="text-sm text-neutral-400">No activity yet.</p>
-              ) : (
-                <ul className="space-y-3">
-                  {activity.map((e) => (
-                    <li
-                      key={e.id}
-                      className="flex items-start justify-between gap-4"
-                    >
-                      <div className="min-w-0">
-                        <p className="text-sm text-neutral-200">{e.title}</p>
-                        {e.meta ? (
-                          <p className="text-xs text-neutral-500">{e.meta}</p>
-                        ) : null}
-                      </div>
-                      <p className="shrink-0 text-xs text-neutral-500">
-                        {e.date}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ProjectActivity projectId={project.id} />
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Notes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ProjectNotes projectId={project.id} />
+          </CardContent>
+        </Card>
 
         <div className="space-y-4">
           <Card>
@@ -97,6 +83,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               />
             </CardContent>
           </Card>
+
+            <ProjectInvoices projectId={project.id} />
+            
         </div>
       </div>
     </section>

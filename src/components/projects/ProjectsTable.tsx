@@ -4,28 +4,84 @@ import Link from "next/link";
 import type { Project, ProjectStatus } from "@/data/projects";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
 
-export function ProjectsTable({ rows }: { rows: Project[] }) {
+type Sort = "updated" | "due" | "name";
+type StatusFilter = "all" | ProjectStatus;
+
+export function ProjectsTable({
+  rows,
+  q,
+  status,
+  sort,
+}: {
+  rows: Project[];
+  q: string;
+  status: StatusFilter;
+  sort: Sort;
+}) {
   const { getStatus } = usePortalState();
 
+  const normalizedQ = q.trim().toLowerCase();
+
+  const visible = rows
+    .map((p) => {
+      const effectiveStatus = getStatus(p.id, p.status);
+      return { ...p, effectiveStatus };
+    })
+    .filter((p) => {
+      if (status !== "all" && p.effectiveStatus !== status) return false;
+      if (!normalizedQ) return true;
+      return (
+        p.name.toLowerCase().includes(normalizedQ) ||
+        p.client.toLowerCase().includes(normalizedQ)
+      );
+    })
+    .sort((a, b) => {
+      if (sort === "name") return a.name.localeCompare(b.name);
+      if (sort === "due") return a.dueDate.localeCompare(b.dueDate);
+      return b.updatedAt.localeCompare(a.updatedAt);
+    });
+
+  if (visible.length === 0) {
+    return (
+      <div className="rounded-lg border border-white/10 p-6 text-sm">
+        <p className="text-neutral-200">No projects match your filters.</p>
+        <p className="mt-1 text-neutral-500">
+          Try a different status, adjust your search, or clear filters.
+        </p>
+        <div className="mt-4">
+          <Link
+            href="/projects"
+            className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 hover:bg-white/10"
+          >
+            Clear filters
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="-mx-2 overflow-x-auto px-2">
-      <table className="w-full text-sm">
-        <thead className="text-left text-neutral-400">
-          <tr className="border-b border-white/10">
-            <th className="py-3 pr-4 font-medium">Project</th>
-            <th className="py-3 pr-4 font-medium">Client</th>
-            <th className="py-3 pr-4 font-medium">Status</th>
-            <th className="py-3 pr-4 font-medium">Due</th>
-            <th className="py-3 font-medium">Updated</th>
-          </tr>
-        </thead>
+    <div className="space-y-3">
+      <p className="text-xs text-neutral-500">{visible.length} result(s)</p>
 
-        <tbody>
-          {rows.map((p) => {
-            const status = getStatus(p.id, p.status);
+      <div className="-mx-2 overflow-x-auto px-2">
+        <table className="w-full text-sm">
+          <thead className="text-left text-neutral-400">
+            <tr className="border-b border-white/10">
+              <th className="py-3 pr-4 font-medium">Project</th>
+              <th className="py-3 pr-4 font-medium">Client</th>
+              <th className="py-3 pr-4 font-medium">Status</th>
+              <th className="py-3 pr-4 font-medium">Due</th>
+              <th className="py-3 font-medium">Updated</th>
+            </tr>
+          </thead>
 
-            return (
-              <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.03]">
+          <tbody>
+            {visible.map((p) => (
+              <tr
+                key={p.id}
+                className="border-b border-white/5 hover:bg-white/[0.03]"
+              >
                 <td className="py-3 pr-4">
                   <Link
                     href={`/projects/${p.id}`}
@@ -36,15 +92,15 @@ export function ProjectsTable({ rows }: { rows: Project[] }) {
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{p.client}</td>
                 <td className="py-3 pr-4">
-                  <StatusBadge status={status} />
+                  <StatusBadge status={p.effectiveStatus} />
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{p.dueDate}</td>
                 <td className="py-3 text-neutral-400">{p.updatedAt}</td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -62,7 +118,12 @@ function StatusBadge({ status }: { status: ProjectStatus | string }) {
       : "bg-white/5 text-neutral-200";
 
   return (
-    <span className={["inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs", styles].join(" ")}>
+    <span
+      className={[
+        "inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs",
+        styles,
+      ].join(" ")}
+    >
       {status}
     </span>
   );

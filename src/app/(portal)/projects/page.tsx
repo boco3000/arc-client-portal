@@ -21,20 +21,6 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
   const status = getStatusParam(sp.status);
   const sort = getSortParam(sp.sort);
 
-  const filtered = projects
-    .filter((p) => {
-      if (status !== "all" && p.status !== status) return false;
-      if (!q) return true;
-      return (
-        p.name.toLowerCase().includes(q) || p.client.toLowerCase().includes(q)
-      );
-    })
-    .sort((a, b) => {
-      if (sort === "name") return a.name.localeCompare(b.name);
-      if (sort === "due") return a.dueDate.localeCompare(b.dueDate);
-      return b.updatedAt.localeCompare(a.updatedAt); // "updated"
-    });
-
   return (
     <section className="space-y-6">
       <header className="space-y-1">
@@ -55,10 +41,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            Results{" "}
-            <span className="text-neutral-500">({filtered.length})</span>
-          </CardTitle>
+          <CardTitle>Results</CardTitle>
           <p className="mt-1 text-xs text-neutral-500">
             {status === "all" ? "All statuses" : `Status: ${status}`}
             {q ? ` • Query: “${q}”` : ""}
@@ -67,29 +50,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
         </CardHeader>
 
         <CardContent>
-          {filtered.length === 0 ? (
-            <div className="rounded-lg border border-white/10 p-6 text-sm">
-              <p className="text-neutral-200">
-                No projects match your filters.
-              </p>
-              <p className="mt-1 text-neutral-500">
-                Try a different status, adjust your search, or clear filters.
-              </p>
-
-              <div className="mt-4">
-                <Link
-                  href="/projects"
-                  className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 hover:bg-white/10"
-                >
-                  Clear filters
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <div className="-mx-2 overflow-x-auto px-2">
-              <ProjectsTable rows={filtered} />
-            </div>
-          )}
+          <ProjectsTable rows={projects} q={q} status={status} sort={sort} />
         </CardContent>
       </Card>
     </section>

@@ -8,6 +8,7 @@ const nav = [
   { href: "/projects", label: "Projects" },
   { href: "/activity", label: "Activity" },
   { href: "/settings", label: "Settings" },
+  { href: "/invoices", label: "Invoices" },
 ];
 
 export function Sidebar() {
