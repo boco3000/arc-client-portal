@@ -24,6 +24,13 @@ type PortalState = {
 
   getInvoiceStatus: (id: string, fallback: InvoiceStatus) => InvoiceStatus;
   setInvoiceStatus: (id: string, status: InvoiceStatus) => void;
+
+  addProjectNote: (note: {
+    projectId: string;
+    title: string;
+    body: string;
+    date: string;
+  }) => void;
 };
 
 type ActivityEvent = {
@@ -121,6 +128,13 @@ export function PortalStateProvider({
       getInvoiceStatus: (id, fallback) => invoiceStatuses[id] ?? fallback,
       setInvoiceStatus: (id, status) =>
         setInvoiceStatuses((prev) => ({ ...prev, [id]: status })),
+
+      addProjectNote: ({ projectId, title, body, date }) => {
+        setNotes((prev) => [
+          { id: crypto.randomUUID(), projectId, title, body, date },
+          ...prev,
+        ]);
+      },
     };
   }, [statuses, activity, notes, invoiceStatuses]);
 

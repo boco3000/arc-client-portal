@@ -28,6 +28,10 @@ export default async function InvoiceDetailPage({ params }: PageProps) {
 
   const grandTotal = total(invoice.items);
 
+  const subtotal = grandTotal;
+  const tax = 0; // placeholder
+  const totalDue = subtotal + tax;
+
   return (
     <section className="space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
@@ -51,6 +55,14 @@ export default async function InvoiceDetailPage({ params }: PageProps) {
           </Link>
         </div>
       </header>
+
+      {invoice.dueDate < new Date().toISOString().slice(0, 10) &&
+      invoice.status !== "paid" ? (
+        <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-sm text-neutral-200">
+          This invoice is past due. Consider marking it overdue or sending a
+          reminder.
+        </div>
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
@@ -129,10 +141,24 @@ export default async function InvoiceDetailPage({ params }: PageProps) {
                 invoiceId={invoice.id}
                 projectId={invoice.projectId}
                 fallback={invoice.status}
+                client={invoice.client}
+                dueDate={invoice.dueDate}
               />
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Totals</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-2 text-sm">
+            <MetaRow label="Subtotal" value={money(subtotal)} />
+            <MetaRow label="Tax" value={money(tax)} />
+            <div className="my-1 h-px bg-white/10" />
+            <MetaRow label="Total due" value={money(totalDue)} />
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

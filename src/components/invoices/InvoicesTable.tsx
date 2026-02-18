@@ -16,6 +16,14 @@ function money(n: number) {
   return `$${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 }
 
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function isPastDue(dueDate: string) {
+  return dueDate < todayISO();
+}
+
 function projectNameFromId(projectId: string) {
   const p = projects.find((x) => x.id === projectId);
   return p?.name ?? projectId;
@@ -43,7 +51,12 @@ export function InvoicesTable({
   const visible = rows
     .map((inv) => {
       const effectiveStatus = getInvoiceStatus(inv.id, inv.status);
-      return { ...inv, effectiveStatus, total: total(inv) };
+      const computedStatus =
+        effectiveStatus !== "paid" && isPastDue(inv.dueDate)
+          ? "overdue"
+          : effectiveStatus;
+
+      return { ...inv, effectiveStatus: computedStatus, total: total(inv) };
     })
     .filter((inv) => {
       if (statusFilter !== "all" && inv.effectiveStatus !== statusFilter)
@@ -77,6 +90,29 @@ export function InvoicesTable({
 
   return (
     <div className="space-y-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <SummaryCard label="Total invoices" value={`${visible.length}`} />
+        <SummaryCard
+          label="Overdue"
+          value={`${visible.filter((x) => x.effectiveStatus === "overdue").length}`}
+        />
+        <SummaryCard
+          label="Outstanding"
+          value={money(
+            visible
+              .filter((x) => x.effectiveStatus !== "paid")
+              .reduce((sum, x) => sum + x.total, 0),
+          )}
+        />
+        <SummaryCard
+          label="Paid"
+          value={money(
+            visible
+              .filter((x) => x.effectiveStatus === "paid")
+              .reduce((sum, x) => sum + x.total, 0),
+          )}
+        />
+      </div>
       <p className="text-xs text-neutral-500">{visible.length} result(s)</p>
 
       <div className="-mx-2 overflow-x-auto px-2">
@@ -96,7 +132,10 @@ export function InvoicesTable({
             {visible.map((inv) => (
               <tr
                 key={inv.id}
-                className="border-b border-white/5 hover:bg-white/[0.03]"
+                className={[
+                  "border-b border-white/5 hover:bg-white/[0.03]",
+                  inv.effectiveStatus === "overdue" ? "bg-white/[0.02]" : "",
+                ].join(" ")}
               >
                 <td className="py-3 pr-4">
                   <Link
@@ -144,7 +183,6 @@ function StatusBadge({ status }: { status: InvoiceStatus | string }) {
           : status === "draft"
             ? "bg-neutral-950 text-neutral-400"
             : "bg-white/5 text-neutral-200";
-
   return (
     <span
       className={[
@@ -156,3 +194,12 @@ function StatusBadge({ status }: { status: InvoiceStatus | string }) {
     </span>
   );
 }
+
+  function SummaryCard({ label, value }: { label: string; value: string }) {
+    return (
+      <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+        <p className="text-xs text-neutral-500">{label}</p>
+        <p className="mt-1 text-lg font-semibold text-neutral-100">{value}</p>
+      </div>
+    );
+  }
