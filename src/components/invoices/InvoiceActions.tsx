@@ -96,12 +96,13 @@ export function InvoiceActions({
         {current === "paid"
           ? "Paid (no reminder)"
           : reminderStatus === "sent"
-          ? "Sent ✓"
-          : "Send reminder"}
+            ? "Sent ✓"
+            : "Send reminder"}
       </button>
 
       {actions.map((a) => {
-        const disabled = isPending || current === a.next || reminderStatus === "sent";
+        const disabled =
+          isPending || current === a.next || reminderStatus === "sent";
 
         return (
           <button

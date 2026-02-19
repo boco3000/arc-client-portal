@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Invoice, InvoiceStatus } from "@/data/invoices";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
 import { projects } from "@/data/projects";
+import { StatusPill } from "@/components/ui/StatusPill";
 
 type Sort = "due" | "issue" | "client" | "total";
 type StatusFilter = "all" | InvoiceStatus;
@@ -147,7 +148,7 @@ export function InvoicesTable({
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{inv.client}</td>
                 <td className="py-3 pr-4">
-                  <StatusBadge status={inv.effectiveStatus} />
+                  <StatusPill variant="invoice" status={inv.effectiveStatus} />
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{inv.dueDate}</td>
                 <td className="py-3 pr-4 text-neutral-200">
@@ -172,34 +173,11 @@ export function InvoicesTable({
   );
 }
 
-function StatusBadge({ status }: { status: InvoiceStatus | string }) {
-  const styles =
-    status === "paid"
-      ? "bg-white/10 text-white"
-      : status === "sent"
-        ? "bg-white/5 text-neutral-100"
-        : status === "overdue"
-          ? "bg-neutral-900 text-neutral-300"
-          : status === "draft"
-            ? "bg-neutral-950 text-neutral-400"
-            : "bg-white/5 text-neutral-200";
+function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <span
-      className={[
-        "inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs",
-        styles,
-      ].join(" ")}
-    >
-      {status}
-    </span>
+    <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+      <p className="text-xs text-neutral-500">{label}</p>
+      <p className="mt-1 text-lg font-semibold text-neutral-100">{value}</p>
+    </div>
   );
 }
-
-  function SummaryCard({ label, value }: { label: string; value: string }) {
-    return (
-      <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-        <p className="text-xs text-neutral-500">{label}</p>
-        <p className="mt-1 text-lg font-semibold text-neutral-100">{value}</p>
-      </div>
-    );
-  }

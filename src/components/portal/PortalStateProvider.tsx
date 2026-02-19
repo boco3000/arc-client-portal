@@ -31,6 +31,8 @@ type PortalState = {
     body: string;
     date: string;
   }) => void;
+
+  getAllActivity: () => ActivityEvent[];
 };
 
 type ActivityEvent = {
@@ -132,9 +134,12 @@ export function PortalStateProvider({
       addProjectNote: ({ projectId, title, body, date }) => {
         setNotes((prev) => [
           { id: crypto.randomUUID(), projectId, title, body, date },
-          ...prev,
+          ...prev,         
         ]);
       },
+
+      getAllActivity: () => activity,
+
     };
   }, [statuses, activity, notes, invoiceStatuses]);
 

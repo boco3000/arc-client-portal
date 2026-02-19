@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Project, ProjectStatus } from "@/data/projects";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
+import { StatusPill } from "@/components/ui/StatusPill";
 
 type Sort = "updated" | "due" | "name";
 type StatusFilter = "all" | ProjectStatus;
@@ -92,7 +93,7 @@ export function ProjectsTable({
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{p.client}</td>
                 <td className="py-3 pr-4">
-                  <StatusBadge status={p.effectiveStatus} />
+                  <StatusPill variant="project" status={p.effectiveStatus} />
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{p.dueDate}</td>
                 <td className="py-3 text-neutral-400">{p.updatedAt}</td>
@@ -105,26 +106,4 @@ export function ProjectsTable({
   );
 }
 
-function StatusBadge({ status }: { status: ProjectStatus | string }) {
-  const styles =
-    status === "active"
-      ? "bg-white/10 text-white"
-      : status === "review"
-      ? "bg-white/5 text-neutral-100"
-      : status === "paused"
-      ? "bg-neutral-900 text-neutral-300"
-      : status === "completed"
-      ? "bg-neutral-950 text-neutral-400"
-      : "bg-white/5 text-neutral-200";
 
-  return (
-    <span
-      className={[
-        "inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs",
-        styles,
-      ].join(" ")}
-    >
-      {status}
-    </span>
-  );
-}
