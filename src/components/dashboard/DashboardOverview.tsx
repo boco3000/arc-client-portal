@@ -10,7 +10,10 @@ function todayISO() {
 }
 
 function money(n: number) {
-  return `$${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
+  return `$${n.toLocaleString("en-US", {
+    minimumFractionDigits: n % 1 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+  })}`;
 }
 
 function invoiceTotal(items: { quantity: number; rate: number }[]) {
@@ -21,7 +24,7 @@ export function DashboardOverview() {
   const { getStatus, getInvoiceStatus, getAllActivity } = usePortalState();
 
   const activeProjects = projects.filter(
-    (p) => getStatus(p.id, p.status) === "active"
+    (p) => getStatus(p.id, p.status) === "active",
   ).length;
 
   const overdueInvoices = invoices.filter((inv) => {
@@ -63,7 +66,10 @@ export function DashboardOverview() {
           ) : (
             <ul className="mt-4 space-y-3">
               {recent.map((e) => (
-                <li key={e.id} className="flex items-start justify-between gap-4">
+                <li
+                  key={e.id}
+                  className="flex items-start justify-between gap-4"
+                >
                   <div className="min-w-0">
                     <p className="text-sm text-neutral-200">{e.title}</p>
                     {e.meta ? (
@@ -78,11 +84,16 @@ export function DashboardOverview() {
         </div>
 
         <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-          <h3 className="text-sm font-semibold text-neutral-100">Quick links</h3>
+          <h3 className="text-sm font-semibold text-neutral-100">
+            Quick links
+          </h3>
 
           <div className="mt-4 space-y-2">
             <QuickLink href="/projects?status=active" label="Active projects" />
-            <QuickLink href="/invoices?status=overdue" label="Overdue invoices" />
+            <QuickLink
+              href="/invoices?status=overdue"
+              label="Overdue invoices"
+            />
             <QuickLink href="/invoices" label="All invoices" />
             <QuickLink href="/projects" label="All projects" />
           </div>

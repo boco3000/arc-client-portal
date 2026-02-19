@@ -9,6 +9,8 @@ import React, {
 } from "react";
 import type { ProjectStatus } from "@/data/projects";
 import type { InvoiceStatus } from "@/data/invoices";
+import { invoices as seedInvoices } from "@/data/invoices";
+import type { Invoice } from "@/data/invoices";
 
 type StatusMap = Record<string, ProjectStatus>;
 
@@ -33,6 +35,10 @@ type PortalState = {
   }) => void;
 
   getAllActivity: () => ActivityEvent[];
+
+  getInvoices: () => Invoice[];
+  getInvoiceById: (id: string) => Invoice | undefined;
+  createInvoice: (invoice: Invoice) => void;
 };
 
 type ActivityEvent = {
@@ -57,6 +63,7 @@ const STORAGE_KEY = "arc.projectStatus.v1";
 const ACTIVITY_STORAGE_KEY = "arc.projectActivity.v1";
 const NOTES_STORAGE_KEY = "arc.projectNotes.v1";
 const INVOICE_STATUS_KEY = "arc.invoiceStatus.v1";
+const INVOICES_STORAGE_KEY = "arc.invoices.v1";
 
 export function PortalStateProvider({
   children,
@@ -68,6 +75,7 @@ export function PortalStateProvider({
   const [notes, setNotes] = useState<Note[]>([]);
   type InvoiceStatusMap = Record<string, InvoiceStatus>;
   const [invoiceStatuses, setInvoiceStatuses] = useState<InvoiceStatusMap>({});
+  const [invoices, setInvoices] = useState<Invoice[]>(seedInvoices);
 
   // Load from localStorage once
   useEffect(() => {
@@ -94,6 +102,11 @@ export function PortalStateProvider({
       if (rawInv) {
         setInvoiceStatuses(JSON.parse(rawInv) ?? {});
       }
+
+      const rawInvoices = localStorage.getItem(INVOICES_STORAGE_KEY);
+      if (rawInvoices) {
+        setInvoices(JSON.parse(rawInvoices) as Invoice[]);
+      }
     } catch {
       // ignore
     }
@@ -106,10 +119,11 @@ export function PortalStateProvider({
       localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(activity));
       localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
       localStorage.setItem(INVOICE_STATUS_KEY, JSON.stringify(invoiceStatuses));
+      localStorage.setItem(INVOICES_STORAGE_KEY, JSON.stringify(invoices));
     } catch {
       // ignore
     }
-  }, [statuses, activity, notes, invoiceStatuses]);
+  }, [statuses, activity, notes, invoices, invoiceStatuses]);
 
   const value = useMemo<PortalState>(() => {
     return {
@@ -134,14 +148,17 @@ export function PortalStateProvider({
       addProjectNote: ({ projectId, title, body, date }) => {
         setNotes((prev) => [
           { id: crypto.randomUUID(), projectId, title, body, date },
-          ...prev,         
+          ...prev,
         ]);
       },
 
       getAllActivity: () => activity,
 
+      getInvoices: () => invoices,
+      getInvoiceById: (id) => invoices.find((i) => i.id === id),
+      createInvoice: (invoice) => setInvoices((prev) => [invoice, ...prev]),
     };
-  }, [statuses, activity, notes, invoiceStatuses]);
+  }, [statuses, activity, notes, invoices, invoiceStatuses]);
 
   return (
     <PortalStateContext.Provider value={value}>

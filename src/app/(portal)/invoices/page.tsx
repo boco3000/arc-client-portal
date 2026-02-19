@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { invoices } from "@/data/invoices";
+import { InvoicesScreen } from "@/components/invoices/InvoicesScreen";
 import { getStringParam } from "@/lib/query";
 import { InvoicesTable } from "@/components/invoices/InvoicesTable";
 import { InvoicesFilters } from "@/components/invoices/InvoicesFilters";
@@ -25,29 +25,7 @@ export default async function InvoicesPage({ searchParams }: PageProps) {
         </p>
       </header>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Filters</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <InvoicesFilters />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Results</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <InvoicesTable
-  rows={invoices}
-  q={q}
-  status={status}
-  sort={sort}
-  project={project}
-/>
-        </CardContent>
-      </Card>
+      <InvoicesScreen q={q} status={status} sort={sort} project={project} />
     </section>
   );
 }

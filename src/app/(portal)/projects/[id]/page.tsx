@@ -9,6 +9,7 @@ import { BackToProjectsButton } from "@/components/projects/BackToProjectsButton
 import { ProjectActivity } from "@/components/projects/ProjectActivity";
 import { ProjectNotes } from "@/components/projects/ProjectNotes";
 import { ProjectInvoices } from "@/components/projects/ProjectInvoices";
+import { CreateInvoiceForm } from "@/components/projects/CreateInvoiceForm";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -84,8 +85,19 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </CardContent>
           </Card>
 
-            <ProjectInvoices projectId={project.id} />
-            
+          <ProjectInvoices projectId={project.id} />
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Create Invoice</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CreateInvoiceForm
+                projectId={project.id}
+                client={project.client}
+              />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
