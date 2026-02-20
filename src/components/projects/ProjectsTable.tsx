@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Project, ProjectStatus } from "@/data/projects";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
 import { StatusPill } from "@/components/ui/StatusPill";
+import { InlineStatusSelect } from "@/components/projects/InlineStatusSelect";
 
 type Sort = "updated" | "due" | "name";
 type StatusFilter = "all" | ProjectStatus;
@@ -89,7 +90,7 @@ export function ProjectsTable({
             {visible.map((p) => (
               <tr
                 key={p.id}
-                className="border-b border-white/5 hover:bg-white/[0.03]"
+                className="group border-b border-white/5 hover:bg-white/[0.03]"
               >
                 <td className="py-3 pr-4">
                   <Link
@@ -101,7 +102,19 @@ export function ProjectsTable({
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{p.client}</td>
                 <td className="py-3 pr-4">
-                  <StatusPill variant="project" status={p.effectiveStatus} />
+                  <div className="flex items-center gap-2">
+                    <StatusPill variant="project" status={p.effectiveStatus} />
+
+                    <InlineStatusSelect
+                      projectId={p.id}
+                      value={p.effectiveStatus as ProjectStatus}
+                      className={[
+                        "opacity-0 transition",
+                        "group-hover:opacity-100",
+                        "focus-within:opacity-100", // keyboard users
+                      ].join(" ")}
+                    />
+                  </div>
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{p.dueDate}</td>
                 <td className="py-3 text-neutral-400">{p.updatedAt}</td>

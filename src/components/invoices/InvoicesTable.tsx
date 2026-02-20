@@ -5,6 +5,7 @@ import type { Invoice, InvoiceStatus } from "@/data/invoices";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
 import { projects } from "@/data/projects";
 import { StatusPill } from "@/components/ui/StatusPill";
+import { InlineInvoiceStatusSelect } from "@/components/invoices/InlineInvoiceStatusSelect";
 
 type Sort = "due" | "issue" | "client" | "total";
 type StatusFilter = "all" | InvoiceStatus;
@@ -136,10 +137,7 @@ export function InvoicesTable({
             {visible.map((inv) => (
               <tr
                 key={inv.id}
-                className={[
-                  "border-b border-white/5 hover:bg-white/[0.03]",
-                  inv.effectiveStatus === "overdue" ? "bg-white/[0.02]" : "",
-                ].join(" ")}
+                className="group border-b border-white/5 hover:bg-white/[0.03]"
               >
                 <td className="py-3 pr-4">
                   <Link
@@ -151,7 +149,23 @@ export function InvoicesTable({
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{inv.client}</td>
                 <td className="py-3 pr-4">
-                  <StatusPill variant="invoice" status={inv.effectiveStatus} />
+                  <div className="flex items-center gap-2">
+                    <StatusPill
+                      variant="invoice"
+                      status={inv.effectiveStatus}
+                    />
+
+                    <InlineInvoiceStatusSelect
+                      invoiceId={inv.id}
+                      projectId={inv.projectId}
+                      value={inv.effectiveStatus}
+                      className={[
+                        "opacity-0 transition",
+                        "group-hover:opacity-100",
+                        "focus-within:opacity-100",
+                      ].join(" ")}
+                    />
+                  </div>
                 </td>
                 <td className="py-3 pr-4 text-neutral-400">{inv.dueDate}</td>
                 <td className="py-3 pr-4 text-neutral-200">
