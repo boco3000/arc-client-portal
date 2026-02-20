@@ -40,6 +40,11 @@ type PortalState = {
   getInvoiceById: (id: string) => Invoice | undefined;
   createInvoice: (invoice: Invoice) => void;
 
+  updateInvoice: (
+    invoiceId: string,
+    patch: Partial<Pick<Invoice, "issueDate" | "dueDate" | "items">>,
+  ) => void;
+
   getProjectEdits: (
     projectId: string,
   ) => Partial<{ name: string; client: string; dueDate: string }>;
@@ -165,6 +170,14 @@ export function PortalStateProvider({
       getInvoiceStatus: (id, fallback) => invoiceStatuses[id] ?? fallback,
       setInvoiceStatus: (id, status) =>
         setInvoiceStatuses((prev) => ({ ...prev, [id]: status })),
+
+      updateInvoice: (invoiceId, patch) => {
+        setInvoices((prev) =>
+          prev.map((inv) =>
+            inv.id === invoiceId ? { ...inv, ...patch } : inv,
+          ),
+        );
+      },
 
       addProjectNote: ({ projectId, title, body, date }) => {
         setNotes((prev) => [

@@ -11,6 +11,7 @@ import { ProjectNotes } from "@/components/projects/ProjectNotes";
 import { ProjectInvoices } from "@/components/projects/ProjectInvoices";
 import { CreateInvoiceForm } from "@/components/projects/CreateInvoiceForm";
 import { ProjectMetaEditor } from "@/components/projects/ProjectMetaEditor";
+import { ProjectDetailsPanel } from "@/components/projects/ProjectDetailsPanel";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -59,7 +60,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               <CardTitle>Project details</CardTitle>
             </CardHeader>
             <CardContent>
-              <ProjectMetaEditor
+              <ProjectDetailsPanel
                 projectId={project.id}
                 initial={{
                   name: project.name,

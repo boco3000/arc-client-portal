@@ -2,20 +2,19 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { usePortalState } from "@/components/portal/PortalStateProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { InvoiceActions } from "@/components/invoices/InvoiceActions";
 import { InvoiceStatusBadge } from "@/components/invoices/InvoiceStatusBadge";
+import { usePortalState } from "@/components/portal/PortalStateProvider";
 import { projects } from "@/data/projects";
+import { InvoiceDetailsPanel } from "@/components/invoices/InvoiceDetailsPanel";
+import { InvoiceLineItemsPanel } from "@/components/invoices/InvoiceLineItemsPanel";
 
 function total(items: { quantity: number; rate: number }[]) {
   return items.reduce((sum, it) => sum + it.quantity * it.rate, 0);
 }
 function money(n: number) {
-  return `$${n.toLocaleString("en-US", {
-    minimumFractionDigits: n % 1 === 0 ? 0 : 2,
-    maximumFractionDigits: 2,
-  })}`;
+  return `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 export function InvoiceDetailClient({ id }: { id: string }) {
@@ -78,39 +77,30 @@ export function InvoiceDetailClient({ id }: { id: string }) {
 
           <Card>
             <CardHeader>
+              <CardTitle>Invoice details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <InvoiceDetailsPanel
+                invoiceId={invoice.id}
+                projectId={invoice.projectId}
+                initial={{
+                  issueDate: invoice.issueDate,
+                  dueDate: invoice.dueDate,
+                }}
+              />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>Line items</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="-mx-2 overflow-x-auto px-2">
-                <table className="w-full text-sm">
-                  <thead className="text-left text-neutral-400">
-                    <tr className="border-b border-white/10">
-                      <th className="py-3 pr-4 font-medium">Description</th>
-                      <th className="py-3 pr-4 font-medium">Qty</th>
-                      <th className="py-3 pr-4 font-medium">Rate</th>
-                      <th className="py-3 font-medium">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoice.items.map((it) => (
-                      <tr key={it.id} className="border-b border-white/5">
-                        <td className="py-3 pr-4 text-neutral-200">
-                          {it.description}
-                        </td>
-                        <td className="py-3 pr-4 text-neutral-400">
-                          {it.quantity}
-                        </td>
-                        <td className="py-3 pr-4 text-neutral-400">
-                          {money(it.rate)}
-                        </td>
-                        <td className="py-3 text-neutral-200">
-                          {money(it.quantity * it.rate)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <InvoiceLineItemsPanel
+                invoiceId={invoice.id}
+                projectId={invoice.projectId}
+                items={invoice.items}
+              />
             </CardContent>
           </Card>
         </div>
