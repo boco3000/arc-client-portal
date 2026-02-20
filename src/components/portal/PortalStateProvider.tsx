@@ -39,6 +39,18 @@ type PortalState = {
   getInvoices: () => Invoice[];
   getInvoiceById: (id: string) => Invoice | undefined;
   createInvoice: (invoice: Invoice) => void;
+
+  getProjectEdits: (
+    projectId: string,
+  ) => Partial<{ name: string; client: string; dueDate: string }>;
+  setProjectEdits: (
+    projectId: string,
+    patch: Partial<{ name: string; client: string; dueDate: string }>,
+  ) => void;
+  clearProjectEdits: (projectId: string) => void;
+
+  resetDemoData: () => void;
+  clearActivity: () => void;
 };
 
 type ActivityEvent = {
@@ -64,6 +76,7 @@ const ACTIVITY_STORAGE_KEY = "arc.projectActivity.v1";
 const NOTES_STORAGE_KEY = "arc.projectNotes.v1";
 const INVOICE_STATUS_KEY = "arc.invoiceStatus.v1";
 const INVOICES_STORAGE_KEY = "arc.invoices.v1";
+const PROJECT_EDITS_KEY = "arc.projectEdits.v1";
 
 export function PortalStateProvider({
   children,
@@ -76,7 +89,11 @@ export function PortalStateProvider({
   type InvoiceStatusMap = Record<string, InvoiceStatus>;
   const [invoiceStatuses, setInvoiceStatuses] = useState<InvoiceStatusMap>({});
   const [invoices, setInvoices] = useState<Invoice[]>(seedInvoices);
-
+  type ProjectEdits = Record<
+    string,
+    Partial<{ name: string; client: string; dueDate: string }>
+  >;
+  const [projectEdits, setProjectEdits] = useState<ProjectEdits>({});
   // Load from localStorage once
   useEffect(() => {
     try {
@@ -107,6 +124,9 @@ export function PortalStateProvider({
       if (rawInvoices) {
         setInvoices(JSON.parse(rawInvoices) as Invoice[]);
       }
+
+      const rawProjectEdits = localStorage.getItem(PROJECT_EDITS_KEY);
+      if (rawProjectEdits) setProjectEdits(JSON.parse(rawProjectEdits));
     } catch {
       // ignore
     }
@@ -120,10 +140,11 @@ export function PortalStateProvider({
       localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
       localStorage.setItem(INVOICE_STATUS_KEY, JSON.stringify(invoiceStatuses));
       localStorage.setItem(INVOICES_STORAGE_KEY, JSON.stringify(invoices));
+      localStorage.setItem(PROJECT_EDITS_KEY, JSON.stringify(projectEdits));
     } catch {
       // ignore
     }
-  }, [statuses, activity, notes, invoices, invoiceStatuses]);
+  }, [statuses, activity, notes, invoices, invoiceStatuses, projectEdits]);
 
   const value = useMemo<PortalState>(() => {
     return {
@@ -157,8 +178,48 @@ export function PortalStateProvider({
       getInvoices: () => invoices,
       getInvoiceById: (id) => invoices.find((i) => i.id === id),
       createInvoice: (invoice) => setInvoices((prev) => [invoice, ...prev]),
+
+      getProjectEdits: (projectId) => projectEdits[projectId] ?? {},
+
+      setProjectEdits: (projectId, patch) => {
+        setProjectEdits((prev) => ({
+          ...prev,
+          [projectId]: { ...(prev[projectId] ?? {}), ...patch },
+        }));
+      },
+
+      clearProjectEdits: (projectId) => {
+        setProjectEdits((prev) => {
+          const next = { ...prev };
+          delete next[projectId];
+          return next;
+        });
+      },
+
+      clearActivity: () => {
+        localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+        setActivity([]);
+      },
+
+      resetDemoData: () => {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+        localStorage.removeItem(NOTES_STORAGE_KEY);
+        localStorage.removeItem(INVOICE_STATUS_KEY);
+        localStorage.removeItem(INVOICES_STORAGE_KEY);
+        localStorage.removeItem(PROJECT_EDITS_KEY);
+
+        setStatuses({});
+        setActivity([]);
+        setNotes([]);
+        setInvoiceStatuses({});
+        setInvoices(seedInvoices);
+        setProjectEdits({});
+
+        window.location.href = "/dashboard";
+      },
     };
-  }, [statuses, activity, notes, invoices, invoiceStatuses]);
+  }, [statuses, activity, notes, invoices, invoiceStatuses, projectEdits]);
 
   return (
     <PortalStateContext.Provider value={value}>

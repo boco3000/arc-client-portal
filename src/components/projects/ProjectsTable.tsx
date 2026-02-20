@@ -19,14 +19,22 @@ export function ProjectsTable({
   status: StatusFilter;
   sort: Sort;
 }) {
-  const { getStatus } = usePortalState();
+  const { getStatus, getProjectEdits } = usePortalState();
 
   const normalizedQ = q.trim().toLowerCase();
 
   const visible = rows
     .map((p) => {
       const effectiveStatus = getStatus(p.id, p.status);
-      return { ...p, effectiveStatus };
+      const edits = getProjectEdits(p.id);
+
+      return {
+        ...p,
+        name: edits.name ?? p.name,
+        client: edits.client ?? p.client,
+        dueDate: edits.dueDate ?? p.dueDate,
+        effectiveStatus,
+      };
     })
     .filter((p) => {
       if (status !== "all" && p.effectiveStatus !== status) return false;
@@ -105,5 +113,3 @@ export function ProjectsTable({
     </div>
   );
 }
-
-

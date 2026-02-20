@@ -10,6 +10,7 @@ import { ProjectActivity } from "@/components/projects/ProjectActivity";
 import { ProjectNotes } from "@/components/projects/ProjectNotes";
 import { ProjectInvoices } from "@/components/projects/ProjectInvoices";
 import { CreateInvoiceForm } from "@/components/projects/CreateInvoiceForm";
+import { ProjectMetaEditor } from "@/components/projects/ProjectMetaEditor";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -50,6 +51,22 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 <MetaRow label="Due date" value={project.dueDate} />
                 <MetaRow label="Last updated" value={project.updatedAt} />
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Project details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ProjectMetaEditor
+                projectId={project.id}
+                initial={{
+                  name: project.name,
+                  client: project.client,
+                  dueDate: project.dueDate,
+                }}
+              />
             </CardContent>
           </Card>
 
