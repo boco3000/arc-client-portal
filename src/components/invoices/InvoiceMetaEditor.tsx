@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
+import { useToast } from "@/components/ui/ToastProvider";
 
 export function InvoiceMetaEditor({
   invoiceId,
@@ -12,7 +13,9 @@ export function InvoiceMetaEditor({
   projectId: string;
   initial: { issueDate: string; dueDate: string };
 }) {
+
   const { updateInvoice, addActivity } = usePortalState();
+  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
   const [issueDate, setIssueDate] = useState(initial.issueDate);
@@ -30,6 +33,8 @@ export function InvoiceMetaEditor({
 
     startTransition(() => {
       updateInvoice(invoiceId, { issueDate, dueDate });
+
+      toast({ kind: "success", title: "Invoice dates saved" });
 
       addActivity({
         id: crypto.randomUUID(),
@@ -78,13 +83,21 @@ export function InvoiceMetaEditor({
           Save dates
         </button>
 
-        {!dirty ? <span className="text-xs text-neutral-500">No unsaved changes.</span> : null}
+        {!dirty ? (
+          <span className="text-xs text-neutral-500">No unsaved changes.</span>
+        ) : null}
       </div>
     </div>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block space-y-1">
       <span className="text-xs text-neutral-500">{label}</span>

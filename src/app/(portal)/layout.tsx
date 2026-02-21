@@ -1,14 +1,12 @@
 import { Sidebar } from "@/components/layout/sidebar/Sidebar";
 import { Topbar } from "@/components/layout/topbar/Topbar";
 import { PortalStateProvider } from "@/components/portal/PortalStateProvider";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 
-export default function PortalLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function PortalLayout({ children }: { children: React.ReactNode }) {
   return (
     <PortalStateProvider>
+       <ToastProvider>
       <div className="flex h-dvh bg-neutral-950 text-neutral-100">
         <aside className="w-64 border-r border-white/10 bg-neutral-900">
           <Sidebar />
@@ -22,6 +20,7 @@ export default function PortalLayout({
           <main className="flex-1 overflow-y-auto p-8">{children}</main>
         </div>
       </div>
+      </ToastProvider>
     </PortalStateProvider>
   );
 }

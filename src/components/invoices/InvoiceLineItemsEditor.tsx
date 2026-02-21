@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import type { Invoice } from "@/data/invoices";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
+import { useToast } from "@/components/ui/ToastProvider";
 
 type Item = Invoice["items"][number];
 
@@ -11,7 +12,8 @@ function parseMoney(input: string) {
   if (!cleaned) return 0;
 
   const parts = cleaned.split(".");
-  const normalized = parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join("")}`;
+  const normalized =
+    parts.length <= 2 ? cleaned : `${parts[0]}.${parts.slice(1).join("")}`;
 
   return Number(normalized);
 }
@@ -29,7 +31,9 @@ export function InvoiceLineItemsEditor({
   projectId: string;
   initialItems: Item[];
 }) {
+
   const { updateInvoice, addActivity } = usePortalState();
+  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
   const [items, setItems] = useState<Item[]>(initialItems);
@@ -43,7 +47,9 @@ export function InvoiceLineItemsEditor({
   }, [items, initialItems]);
 
   function setItem(id: string, patch: Partial<Item>) {
-    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)));
+    setItems((prev) =>
+      prev.map((it) => (it.id === id ? { ...it, ...patch } : it)),
+    );
   }
 
   function addItem() {
@@ -67,6 +73,12 @@ export function InvoiceLineItemsEditor({
 
     startTransition(() => {
       updateInvoice(invoiceId, { items });
+
+      toast({
+        kind: "success",
+        title: "Line items saved",
+        message: "Totals updated.",
+      });
 
       addActivity({
         id: crypto.randomUUID(),
@@ -101,7 +113,9 @@ export function InvoiceLineItemsEditor({
                   <td className="py-2 pr-3">
                     <input
                       value={it.description}
-                      onChange={(e) => setItem(it.id, { description: e.target.value })}
+                      onChange={(e) =>
+                        setItem(it.id, { description: e.target.value })
+                      }
                       className="w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
                     />
                   </td>
@@ -112,7 +126,9 @@ export function InvoiceLineItemsEditor({
                       value={String(it.quantity)}
                       onChange={(e) => {
                         const next = Math.max(0, Number(e.target.value || 0));
-                        setItem(it.id, { quantity: Number.isFinite(next) ? next : 0 });
+                        setItem(it.id, {
+                          quantity: Number.isFinite(next) ? next : 0,
+                        });
                       }}
                       className="w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
                     />
@@ -122,13 +138,17 @@ export function InvoiceLineItemsEditor({
                     <input
                       inputMode="decimal"
                       value={it.rate === 0 ? "" : String(it.rate)}
-                      onChange={(e) => setItem(it.id, { rate: parseMoney(e.target.value) })}
+                      onChange={(e) =>
+                        setItem(it.id, { rate: parseMoney(e.target.value) })
+                      }
                       placeholder="0.00"
                       className="w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
                     />
                   </td>
 
-                  <td className="py-2 pr-3 text-neutral-200">{money(amount)}</td>
+                  <td className="py-2 pr-3 text-neutral-200">
+                    {money(amount)}
+                  </td>
 
                   <td className="py-2">
                     <button
@@ -176,7 +196,9 @@ export function InvoiceLineItemsEditor({
           Save line items
         </button>
 
-        {!dirty ? <span className="text-xs text-neutral-500">No changes.</span> : null}
+        {!dirty ? (
+          <span className="text-xs text-neutral-500">No changes.</span>
+        ) : null}
       </div>
     </div>
   );

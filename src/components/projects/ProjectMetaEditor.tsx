@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
+import { useToast } from "@/components/ui/ToastProvider";
 
 export function ProjectMetaEditor({
   projectId,
@@ -12,10 +13,9 @@ export function ProjectMetaEditor({
 }) {
   const { getProjectEdits, setProjectEdits, clearProjectEdits, addActivity } =
     usePortalState();
-
+  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
-  // effective values = initial + edits
   const edits = getProjectEdits(projectId);
   const effective = {
     name: edits.name ?? initial.name,
@@ -28,20 +28,26 @@ export function ProjectMetaEditor({
   const [client, setClient] = useState(effective.client);
   const [dueDate, setDueDate] = useState(effective.dueDate);
 
-  // keep inputs synced if user resets edits elsewhere
   useEffect(() => {
     setName(effective.name);
     setClient(effective.client);
     setDueDate(effective.dueDate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, edits.name, edits.client, edits.dueDate]);
 
   const dirty =
-    name !== effective.name || client !== effective.client || dueDate !== effective.dueDate;
+    name !== effective.name ||
+    client !== effective.client ||
+    dueDate !== effective.dueDate;
 
   function onSave() {
     startTransition(() => {
       setProjectEdits(projectId, { name, client, dueDate });
+
+      toast({
+        kind: "success",
+        title: "Project updated",
+        message: "Details saved.",
+      });
 
       addActivity({
         id: crypto.randomUUID(),
@@ -56,6 +62,12 @@ export function ProjectMetaEditor({
   function onReset() {
     startTransition(() => {
       clearProjectEdits(projectId);
+
+      toast({
+        kind: "info",
+        title: "Project reset",
+        message: "Reverted to defaults.",
+      });
 
       addActivity({
         id: crypto.randomUUID(),
@@ -112,10 +124,10 @@ export function ProjectMetaEditor({
         <button
           type="button"
           onClick={onReset}
-          disabled={isPending}
+          disabled={isPending || Object.keys(edits).length === 0}
           className={[
             "rounded-md border border-white/10 px-3 py-2 text-sm transition",
-            isPending
+            isPending || Object.keys(edits).length === 0
               ? "bg-white/5 text-neutral-500"
               : "bg-white/5 text-neutral-200 hover:bg-white/10",
           ].join(" ")}
@@ -133,7 +145,13 @@ export function ProjectMetaEditor({
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block space-y-1">
       <span className="text-xs text-neutral-500">{label}</span>

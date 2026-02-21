@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import type { InvoiceStatus } from "@/data/invoices";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
+import { useToast } from "@/components/ui/ToastProvider";
 
 const actions: Array<{ label: string; next: InvoiceStatus }> = [
   { label: "Mark as Sent", next: "sent" },
@@ -26,8 +27,9 @@ export function InvoiceActions({
 }) {
   const { getInvoiceStatus, setInvoiceStatus, addActivity, addProjectNote } =
     usePortalState();
-
+  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
+
   const [reminderStatus, setReminderStatus] = useState<"idle" | "sent">("idle");
 
   const current = getInvoiceStatus(invoiceId, fallback);
@@ -68,9 +70,15 @@ export function InvoiceActions({
         date,
       });
 
-      setReminderStatus("sent");
-      window.setTimeout(() => setReminderStatus("idle"), 2000);
+      toast({
+        kind: "success",
+        title: "Reminder recorded",
+        message: "Logged to activity and notes.",
+      });
     });
+
+    setReminderStatus("sent");
+    window.setTimeout(() => setReminderStatus("idle"), 2000);
   }
 
   return (
