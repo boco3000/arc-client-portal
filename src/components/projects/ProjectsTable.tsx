@@ -53,15 +53,15 @@ export function ProjectsTable({
 
   if (visible.length === 0) {
     return (
-      <div className="rounded-lg border border-white/10 p-6 text-sm">
-        <p className="text-neutral-200">No projects match your filters.</p>
-        <p className="mt-1 text-neutral-500">
+      <div className="rounded-lg border border-[var(--border-soft)] p-6 text-sm">
+        <p className="text-[var(--text)]">No projects match your filters.</p>
+        <p className="mt-1 text-[var(--muted-2)]">
           Try a different status, adjust your search, or clear filters.
         </p>
         <div className="mt-4">
           <Link
             href="/projects"
-            className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 hover:bg-white/10"
+            className="inline-flex items-center rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--heading)] hover:bg-[var(--surface-hover)]"
           >
             Clear filters
           </Link>
@@ -72,12 +72,12 @@ export function ProjectsTable({
 
   return (
     <div className="space-y-3">
-      <p className="text-xs text-neutral-500">{visible.length} result(s)</p>
+      <p className="text-xs text-[var(--muted-2)]">{visible.length} result(s)</p>
 
       <div className="-mx-2 overflow-x-auto px-2">
         <table className="w-full text-sm">
-          <thead className="text-left text-neutral-400">
-            <tr className="border-b border-white/10">
+          <thead className="text-left text-[var(--muted)]">
+            <tr className="border-b border-[var(--border-soft)]">
               <th className="py-3 pr-4 font-medium">Project</th>
               <th className="py-3 pr-4 font-medium">Client</th>
               <th className="py-3 pr-4 font-medium">Status</th>
@@ -90,17 +90,17 @@ export function ProjectsTable({
             {visible.map((p) => (
               <tr
                 key={p.id}
-                className="group border-b border-white/5 hover:bg-white/[0.03]"
+                className="group border-b border-[var(--border-soft)] hover:bg-[var(--surface-1)]"
               >
                 <td className="py-3 pr-4">
                   <Link
                     href={`/projects/${p.id}`}
-                    className="block rounded-sm text-neutral-200 underline-offset-4 hover:underline hover:text-white outline-none focus:ring-2 focus:ring-white/20"
+                    className="block rounded-sm text-[var(--text)] underline-offset-4 hover:underline hover:text-[var(--heading)] outline-none focus:ring-2 focus:ring-[var(--border)]"
                   >
                     {p.name}
                   </Link>
                 </td>
-                <td className="py-3 pr-4 text-neutral-400">{p.client}</td>
+                <td className="py-3 pr-4 text-[var(--muted)]">{p.client}</td>
                 <td className="py-3 pr-4">
                   <div className="flex items-center gap-2">
                     <StatusPill variant="project" status={p.effectiveStatus} />
@@ -116,8 +116,8 @@ export function ProjectsTable({
                     />
                   </div>
                 </td>
-                <td className="py-3 pr-4 text-neutral-400">{p.dueDate}</td>
-                <td className="py-3 text-neutral-400">{p.updatedAt}</td>
+                <td className="py-3 pr-4 text-[var(--muted)]">{p.dueDate}</td>
+                <td className="py-3 text-[var(--muted)]">{p.updatedAt}</td>
               </tr>
             ))}
           </tbody>

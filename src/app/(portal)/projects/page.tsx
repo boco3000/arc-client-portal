@@ -25,7 +25,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
     <section className="space-y-6">
       <header className="space-y-1">
         <h2 className="text-xl font-semibold">Projects</h2>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-[var(--muted)]">
           Search and filter projects using URL state.
         </p>
       </header>
@@ -42,7 +42,7 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
       <Card>
         <CardHeader>
           <CardTitle>Results</CardTitle>
-          <p className="mt-1 text-xs text-neutral-500">
+          <p className="mt-1 text-xs text-[var(--muted-2)]">
             {status === "all" ? "All statuses" : `Status: ${status}`}
             {q ? ` • Query: “${q}”` : ""}
             {sort !== "updated" ? ` • Sort: ${sort}` : ""}
@@ -60,14 +60,14 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
 function StatusBadge({ status }: { status: string }) {
   const styles =
     status === "active"
-      ? "bg-white/10 text-white"
+      ? "bg-[var(--border-soft)] text-[var(--text)]"
       : status === "review"
-        ? "bg-white/5 text-neutral-100"
+        ? "bg-[var(--surface-2)] text-[var(--text)]"
         : status === "paused"
-          ? "bg-neutral-900 text-neutral-300"
+          ? "bg-[var(--panel-bg)] text-[var(--muted)]"
           : status === "completed"
-            ? "bg-neutral-950 text-neutral-400"
-            : "bg-white/5 text-neutral-200";
+            ? "bg-[var(--app-bg)] text-[var(--muted)]"
+            : "bg-[var(--surface-2)] text-[var(--text)]";
 
   return (
     <span

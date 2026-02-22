@@ -20,7 +20,7 @@ export default async function InvoicesPage({ searchParams }: PageProps) {
     <section className="space-y-6">
       <header className="space-y-1">
         <h2 className="text-xl font-semibold">Invoices</h2>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-[var(--muted)]">
           Track billing status and due dates.
         </p>
       </header>

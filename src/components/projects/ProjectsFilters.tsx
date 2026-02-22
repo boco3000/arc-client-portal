@@ -93,9 +93,9 @@ export function ProjectsFilters() {
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search projects or clients…"
           className={[
-            "w-full rounded-lg border border-white/10 bg-white/5",
-            "px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500",
-            "outline-none focus:ring-2 focus:ring-white/20",
+            "w-full rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)]",
+            "px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)]",
+            "outline-none focus:ring-2 focus:ring-[var(--border)]",
           ].join(" ")}
         />
       </label>
@@ -113,10 +113,10 @@ export function ProjectsFilters() {
               }}
               className={[
                 "inline-flex items-center rounded-md px-3 py-1.5 text-sm transition",
-                "border border-white/10",
+                "border border-[var(--border-soft)]",
                 p.active
-                  ? "bg-white/10 text-white"
-                  : "text-neutral-300 hover:bg-white/5",
+                  ? "bg-[var(--surface-hover)] text-[var(--heading)]"
+                  : "text-[var(--muted)] hover:bg-[var(--surface-2)]",
               ].join(" ")}
               aria-pressed={p.active}
             >
@@ -126,7 +126,7 @@ export function ProjectsFilters() {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
-          <label className="text-xs text-neutral-500" htmlFor="sort">
+          <label className="text-xs text-[var(--muted-2)]" htmlFor="sort">
             Sort
           </label>
 
@@ -145,10 +145,10 @@ export function ProjectsFilters() {
               className={[
                 "appearance-none",
                 "h-10",
-                "rounded-lg border border-white/10",
-                "bg-neutral-950 text-neutral-100",
+                "rounded-lg border border-[var(--border-soft)]",
+                "bg-[var(--surface-2)] text-[var(--text)]",
                 "pl-3 pr-8 text-sm",
-                "outline-none focus:ring-2 focus:ring-white/20",
+                "outline-none focus:ring-2 focus:ring-[var(--border)]",
                 "transition",
               ].join(" ")}
             >
@@ -157,7 +157,7 @@ export function ProjectsFilters() {
               <option value="name">Name</option>
             </select>
 
-            <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-neutral-500">
+            <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-[var(--muted-2)]">
               <svg
                 width="14"
                 height="14"

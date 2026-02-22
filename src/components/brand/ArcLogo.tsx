@@ -27,8 +27,8 @@ export function ArcLogo({
         <span
           className={[
             "text-lg font-semibold tracking-[0.06em]",
-            "text-neutral-100 transition",
-            "group-hover:text-white",
+            "text-[var(--heading)]",
+            "group-hover:text-[var(--heading)]",
           ].join(" ")}
         >
           Arc

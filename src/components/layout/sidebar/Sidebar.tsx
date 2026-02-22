@@ -20,14 +20,14 @@ export function Sidebar() {
       <div
         className={[
           "px-6 py-6",
-          "border-b border-white/[0.06]",
-          "bg-gradient-to-b from-white/[0.03] to-transparent",
+          "border-b border-[var(--border-soft)]",
+          "bg-gradient-to-b from-[var(--surface-1)] to-transparent",
         ].join(" ")}
       >
         <div className="space-y-2">
           <ArcLogo />
 
-          <p className="text-xs leading-relaxed text-neutral-500">
+          <p className="text-xs leading-relaxed text-[var(--muted-2)]">
             Clarity, control, and momentum in one streamlined workspace.
           </p>
         </div>
@@ -44,16 +44,16 @@ export function Sidebar() {
               className={[
                 "group relative block rounded-md px-3 py-2 text-sm",
                 "transition-[background-color,transform,color] duration-150 ease-out",
-                "outline-none focus-visible:ring-2 focus-visible:ring-white/20",
+                "outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
                 active
                   ? [
-                      "text-white",
-                      "bg-white/10",
-                      "shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
+                      "text-[var(--heading)]",
+                      "bg-[var(--surface-2)]",
+                      "shadow-[inset_0_1px_0_var(--border-soft)]",
                     ].join(" ")
                   : [
-                      "text-neutral-400",
-                      "hover:text-white hover:bg-white/5",
+                      "text-[var(--muted)]",
+                      "hover:text-[var(--heading)] hover:bg-[var(--surface-2)]",
                       "hover:-translate-y-[1px]",
                     ].join(" "),
               ].join(" ")}
@@ -61,7 +61,11 @@ export function Sidebar() {
               {active ? (
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 top-1/2 h-5 w-[2px] -translate-y-1/2 rounded-full bg-white/40"
+                  className={[
+                    "absolute left-0 top-1/2 h-6 w-[2px] -translate-y-1/2 rounded-full opacity-80 transition-all duration-200",
+                    "bg-gradient-to-b from-rose-400 via-amber-300 via-cyan-300 to-indigo-400",
+                    "opacity-80",
+                  ].join(" ")}
                 />
               ) : null}
               {item.label}

@@ -84,9 +84,9 @@ export function InvoicesTable({
 
   if (visible.length === 0) {
     return (
-      <div className="rounded-lg border border-white/10 p-6 text-sm">
-        <p className="text-neutral-200">No invoices match your filters.</p>
-        <p className="mt-1 text-neutral-500">
+      <div className="rounded-lg border border-[var(--border-soft)] p-6 text-sm">
+        <p className="text-[var(--text)]">No invoices match your filters.</p>
+        <p className="mt-1 text-[var(--muted-2)]">
           Try a different search or status.
         </p>
       </div>
@@ -118,12 +118,12 @@ export function InvoicesTable({
           )}
         />
       </div>
-      <p className="text-xs text-neutral-500">{visible.length} result(s)</p>
+      <p className="text-xs text-[var(--muted-2)]">{visible.length} result(s)</p>
 
       <div className="-mx-2 overflow-x-auto px-2">
         <table className="w-full text-sm">
-          <thead className="text-left text-neutral-400">
-            <tr className="border-b border-white/10">
+          <thead className="text-left text-[var(--muted)]">
+            <tr className="border-b border-[var(--border-soft)]">
               <th className="py-3 pr-4 font-medium">Invoice</th>
               <th className="py-3 pr-4 font-medium">Client</th>
               <th className="py-3 pr-4 font-medium">Status</th>
@@ -137,17 +137,17 @@ export function InvoicesTable({
             {visible.map((inv) => (
               <tr
                 key={inv.id}
-                className="group border-b border-white/5 hover:bg-white/[0.03]"
+                className="group border-b border-[var(--border-soft)] hover:bg-[var(--surface-1)]"
               >
                 <td className="py-3 pr-4">
                   <Link
                     href={`/invoices/${inv.id}`}
-                    className="block rounded-sm text-neutral-200 underline-offset-4 hover:underline hover:text-white outline-none focus:ring-2 focus:ring-white/20"
+                    className="block rounded-sm text-[var(--text)] underline-offset-4 hover:underline hover:text-[var(--heading)] outline-none focus:ring-2 focus:ring-[var(--border)]"
                   >
                     {inv.id}
                   </Link>
                 </td>
-                <td className="py-3 pr-4 text-neutral-400">{inv.client}</td>
+                <td className="py-3 pr-4 text-[var(--muted)]">{inv.client}</td>
                 <td className="py-3 pr-4">
                   <div className="flex items-center gap-2">
                     <StatusPill
@@ -167,16 +167,16 @@ export function InvoicesTable({
                     />
                   </div>
                 </td>
-                <td className="py-3 pr-4 text-neutral-400">{inv.dueDate}</td>
-                <td className="py-3 pr-4 text-neutral-200">
+                <td className="py-3 pr-4 text-[var(--muted)]">{inv.dueDate}</td>
+                <td className="py-3 pr-4 text-[var(--text)]">
                   {money(inv.total)}
                 </td>
                 <td className="py-3">
                   <div className="min-w-0">
-                    <p className="truncate text-neutral-200">
+                    <p className="truncate text-[var(--text)]">
                       {projectNameFromId(inv.projectId)}
                     </p>
-                    <p className="mt-0.5 text-xs text-neutral-500">
+                    <p className="mt-0.5 text-xs text-[var(--muted-2)]">
                       {inv.projectId}
                     </p>
                   </div>
@@ -192,9 +192,9 @@ export function InvoicesTable({
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-      <p className="text-xs text-neutral-500">{label}</p>
-      <p className="mt-1 text-lg font-semibold text-neutral-100">{value}</p>
+    <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)] p-3">
+      <p className="text-xs text-[var(--muted-2)]">{label}</p>
+      <p className="mt-1 text-lg font-semibold text-[var(--heading)]">{value}</p>
     </div>
   );
 }

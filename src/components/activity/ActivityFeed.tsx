@@ -116,15 +116,15 @@ export function ActivityFeed({
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search activity…"
             className={[
-              "w-full rounded-lg border border-white/10 bg-white/5",
-              "px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500",
+              "w-full rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)]",
+              "px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)",
               "outline-none focus:ring-2 focus:ring-white/20",
             ].join(" ")}
           />
         </label>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="project" className="text-xs text-neutral-500">
+          <label htmlFor="project" className="text-xs text-[var(--muted-2)]">
             Project
           </label>
           <select
@@ -139,8 +139,8 @@ export function ActivityFeed({
               router.push(`${pathname}${qs}`);
             }}
             className={[
-              "h-10 rounded-lg border border-white/10",
-              "bg-neutral-950 text-neutral-100",
+              "h-10 rounded-lg border border-[var(--border-soft)]",
+              "bg-[var(--app-bg)] text-[var(--text)]",
               "px-3 text-sm outline-none focus:ring-2 focus:ring-white/20",
             ].join(" ")}
           >
@@ -154,7 +154,7 @@ export function ActivityFeed({
         </div>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="type" className="text-xs text-neutral-500">
+          <label htmlFor="type" className="text-xs text-[var(--muted-2)]">
             Type
           </label>
           <select
@@ -170,8 +170,8 @@ export function ActivityFeed({
               router.push(`${pathname}${qs}`);
             }}
             className={[
-              "h-10 rounded-lg border border-white/10",
-              "bg-neutral-950 text-neutral-100",
+              "h-10 rounded-lg border border-[var(--border-soft)]",
+              "bg-[var(--app-bg)] text-[var(--text)]",
               "px-3 text-sm outline-none focus:ring-2 focus:ring-white/20",
             ].join(" ")}
           >
@@ -224,7 +224,7 @@ export function ActivityFeed({
 
       {/* Feed */}
       {filtered.length === 0 ? (
-        <div className="rounded-lg border border-white/10 p-6 text-sm text-neutral-400">
+        <div className="rounded-lg border border-white/10 p-6 text-sm text-[var(--muted)]">
           No activity matches your filters.
         </div>
       ) : (
@@ -242,14 +242,14 @@ export function ActivityFeed({
 
             return (
               <li key={e.id} className="relative pl-9">
-                <span className="absolute left-0 top-1.5 grid h-6 w-6 place-items-center rounded-full border border-white/10 bg-neutral-950">
+                <span className="absolute left-0 top-1.5 grid h-6 w-6 place-items-center rounded-full border border-white/10 bg-[var(--app-bg)]">
                   <span className={["h-2 w-2 rounded-full", dot].join(" ")} />
                 </span>
 
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="text-sm text-neutral-100">{e.title}</p>
-                    <p className="mt-0.5 text-xs text-neutral-500">
+                    <p className="text-sm text-[var(--text)]">{e.title}</p>
+                    <p className="mt-0.5 text-xs text-[var(--muted-2)]">
                       {projectName(e.projectId)}
                       {e.meta ? ` • ${e.meta}` : ""}
                     </p>
@@ -257,14 +257,14 @@ export function ActivityFeed({
                     <div className="mt-2">
                       <Link
                         href={`/projects/${e.projectId}`}
-                        className="text-xs text-neutral-400 hover:text-white underline-offset-4 hover:underline"
+                        className="text-xs text-[var(--muted)] hover:text-[var(--heading)] underline-offset-4 hover:underline"
                       >
                         View project
                       </Link>
                     </div>
                   </div>
 
-                  <time className="shrink-0 text-xs text-neutral-500">
+                  <time className="shrink-0 text-xs text-[var(--muted-2)]">
                     {e.date}
                   </time>
                 </div>
@@ -284,12 +284,12 @@ function Chip({ label, onClear }: { label: string; onClear: () => void }) {
       onClick={onClear}
       className={[
         "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition",
-        "border border-white/10 bg-white/5 text-neutral-200 hover:bg-white/10",
+        "border border-white/10 bg-white/5 text-[var(--text)] hover:bg-white/10",
       ].join(" ")}
       aria-label={`Clear filter: ${label}`}
     >
-      <span className="text-neutral-100">{label}</span>
-      <span className="text-neutral-500">×</span>
+      <span className="text-[var(--text)]">{label}</span>
+      <span className="text-[var(--muted-2)]">×</span>
     </button>
   );
 }

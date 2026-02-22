@@ -48,21 +48,21 @@ export function DashboardOverview() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4 lg:col-span-2">
+        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-4 lg:col-span-2">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-neutral-100">
+            <h3 className="text-sm font-semibold text-[var(--heading)]">
               Recent activity
             </h3>
             <Link
               href="/activity"
-              className="text-xs text-neutral-400 hover:text-white underline-offset-4 hover:underline"
+              className="text-xs text-[var(--muted)] hover:text-white underline-offset-4 hover:underline"
             >
               View all
             </Link>
           </div>
 
           {recent.length === 0 ? (
-            <p className="mt-3 text-sm text-neutral-400">No activity yet.</p>
+            <p className="mt-3 text-sm text-[var(--muted)]">No activity yet.</p>
           ) : (
             <ul className="mt-4 space-y-3">
               {recent.map((e) => (
@@ -71,20 +71,20 @@ export function DashboardOverview() {
                   className="flex items-start justify-between gap-4"
                 >
                   <div className="min-w-0">
-                    <p className="text-sm text-neutral-200">{e.title}</p>
+                    <p className="text-sm text-[var(--text)]">{e.title}</p>
                     {e.meta ? (
-                      <p className="text-xs text-neutral-500">{e.meta}</p>
+                      <p className="text-xs text-[var(--muted-2)]">{e.meta}</p>
                     ) : null}
                   </div>
-                  <p className="shrink-0 text-xs text-neutral-500">{e.date}</p>
+                  <p className="shrink-0 text-xs text-[var(--muted-2)]">{e.date}</p>
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-          <h3 className="text-sm font-semibold text-neutral-100">
+        <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-4">
+          <h3 className="text-sm font-semibold text-[var(--heading)]">
             Quick links
           </h3>
 
@@ -105,9 +105,9 @@ export function DashboardOverview() {
 
 function KPI({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-      <p className="text-xs text-neutral-500">{label}</p>
-      <p className="mt-1 text-lg font-semibold text-neutral-100">{value}</p>
+    <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-3">
+      <p className="text-xs text-[var(--muted-2)]">{label}</p>
+      <p className="mt-1 text-lg font-semibold text-[var(--text)]">{value}</p>
     </div>
   );
 }
@@ -116,7 +116,7 @@ function QuickLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="block rounded-lg border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-neutral-200 hover:bg-white/5 hover:text-white"
+      className="block rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] hover:bg-[var(--surface-hover)] hover:text-white"
     >
       {label}
     </Link>

@@ -33,7 +33,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <h2 className="text-xl font-semibold">{project.name}</h2>
             <StatusBadge status={effectiveStatus} />
           </div>
-          <p className="text-sm text-neutral-400">{project.client}</p>
+          <p className="text-sm text-[var(--muted)]">{project.client}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -47,7 +47,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <CardHeader>
               <CardTitle>Overview</CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-neutral-300">
+            <CardContent className="text-sm text-[var(--muted)]">
               <div className="grid gap-2">
                 <MetaRow label="Due date" value={project.dueDate} />
                 <MetaRow label="Last updated" value={project.updatedAt} />
@@ -125,8 +125,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-xs text-neutral-500">{label}</span>
-      <span className="text-sm text-neutral-200">{value}</span>
+      <span className="text-xs text-[var(--muted-2)]">{label}</span>
+      <span className="text-sm text-[var(--text)]">{value}</span>
     </div>
   );
 }
@@ -134,19 +134,19 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 function StatusBadge({ status }: { status: string }) {
   const styles =
     status === "active"
-      ? "bg-white/10 text-white"
+      ? "bg-border-[var(--border-soft)] text-[var(--text)]"
       : status === "review"
-        ? "bg-white/5 text-neutral-100"
+        ? "bg-[var(--surface-2)] text-[var(--text)]"
         : status === "paused"
-          ? "bg-neutral-900 text-neutral-300"
+          ? "bg-[var(--panel-bg)] text-[var(--muted)]"
           : status === "completed"
-            ? "bg-neutral-950 text-neutral-400"
-            : "bg-white/5 text-neutral-200";
+            ? "bg-[var(--app-bg)] text-[var(--muted)]"
+            : "bg-[var(--surface-2)] text-[var(--text)]";
 
   return (
     <span
       className={[
-        "inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs",
+        "inline-flex items-center rounded-md border border-[var(--border-soft)] px-2 py-1 text-xs",
         styles,
       ].join(" ")}
     >
