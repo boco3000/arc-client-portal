@@ -55,7 +55,7 @@ export function DashboardOverview() {
             </h3>
             <Link
               href="/activity"
-              className="text-xs text-[var(--muted)] hover:text-white underline-offset-4 hover:underline"
+              className="text-xs text-[var(--muted)] hover:text-[var(--text)] underline-offset-4 hover:underline"
             >
               View all
             </Link>
@@ -116,7 +116,7 @@ function QuickLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="block rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] hover:bg-[var(--surface-hover)] hover:text-white"
+      className="block rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] hover:bg-[var(--surface-hover)] hover:text-[var(--heading)]"
     >
       {label}
     </Link>

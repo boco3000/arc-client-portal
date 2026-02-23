@@ -46,7 +46,7 @@
 
   --surface-1: rgba(0, 0, 0, 0.03);
   --surface-2: rgba(0, 0, 0, 0.05);
-  --surface-hover: rgba(0, 0, 0, 0.08);
+  --surface-hover: rgba(0, 0, 0, 0.06);
 
   --heading: #0b0b0b;
   --link: rgba(0, 0, 0, 0.92);
@@ -74,7 +74,7 @@
     /* surfaces */
     --surface-1: rgba(255, 255, 255, 0.03); /* cards / panels */
     --surface-2: rgba(255, 255, 255, 0.05); /* inputs / pills */
-    --surface-hover: rgba(255, 255, 255, 0.08);
+    --surface-hover: rgba(255, 255, 255, 0.12);
 
     /* text */
     --heading: #ffffff;

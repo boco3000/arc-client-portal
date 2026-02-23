@@ -94,7 +94,7 @@ function ToastViewport({
             ? "border-emerald-500/20 bg-emerald-500/10"
             : t.kind === "error"
               ? "border-rose-500/20 bg-rose-500/10"
-              : "border-white/10 bg-white/5";
+              : "border-[var(--border-soft)] bg-[var(--surface-2)]";
 
         return (
           <div
@@ -102,7 +102,7 @@ function ToastViewport({
             role="status"
             className={[
               "rounded-lg border p-3 shadow-lg backdrop-blur",
-              "text-sm text-neutral-100",
+              "text-sm text-[var(--heading)]",
               tone,
             ].join(" ")}
           >
@@ -110,7 +110,7 @@ function ToastViewport({
               <div className="min-w-0">
                 <p className="font-medium">{t.title}</p>
                 {t.message ? (
-                  <p className="mt-0.5 text-xs text-neutral-300">{t.message}</p>
+                  <p className="mt-0.5 text-xs text-[var(--muted)]">{t.message}</p>
                 ) : null}
               </div>
 
@@ -119,8 +119,8 @@ function ToastViewport({
                 onClick={() => onDismiss(t.id)}
                 className={[
                   "grid h-7 w-7 place-items-center rounded-md",
-                  "border border-white/10 bg-white/5 text-neutral-200",
-                  "hover:bg-white/10 outline-none focus:ring-2 focus:ring-white/20",
+                  "border border-[var(--border-soft)] bg-[var(--surface-2)] text-[var(--text)]",
+                  "hover:bg-[var(--surface-hover)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
                 ].join(" ")}
                 aria-label="Dismiss notification"
               >

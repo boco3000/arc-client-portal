@@ -117,8 +117,8 @@ export function ActivityFeed({
             placeholder="Search activity…"
             className={[
               "w-full rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)]",
-              "px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)",
-              "outline-none focus:ring-2 focus:ring-white/20",
+              "px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)]",
+              "outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
             ].join(" ")}
           />
         </label>
@@ -141,7 +141,7 @@ export function ActivityFeed({
             className={[
               "h-10 rounded-lg border border-[var(--border-soft)]",
               "bg-[var(--app-bg)] text-[var(--text)]",
-              "px-3 text-sm outline-none focus:ring-2 focus:ring-white/20",
+              "px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
             ].join(" ")}
           >
             <option value="">All</option>
@@ -172,7 +172,7 @@ export function ActivityFeed({
             className={[
               "h-10 rounded-lg border border-[var(--border-soft)]",
               "bg-[var(--app-bg)] text-[var(--text)]",
-              "px-3 text-sm outline-none focus:ring-2 focus:ring-white/20",
+              "px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
             ].join(" ")}
           >
             <option value="">All</option>
@@ -224,25 +224,25 @@ export function ActivityFeed({
 
       {/* Feed */}
       {filtered.length === 0 ? (
-        <div className="rounded-lg border border-white/10 p-6 text-sm text-[var(--muted)]">
+        <div className="rounded-lg border border-[var(--border-soft)] p-6 text-sm text-[var(--muted)]">
           No activity matches your filters.
         </div>
       ) : (
         <ol className="relative space-y-6">
-          <div className="pointer-events-none absolute left-[11px] top-2 h-[calc(100%-8px)] w-px bg-white/10" />
+          <div className="pointer-events-none absolute left-[11px] top-2 h-[calc(100%-8px)] w-px bg-[var(--border-soft)]" />
 
           {filtered.map((e) => {
             const t = inferType(e.meta);
             const dot =
               t === "notes"
-                ? "bg-white/40"
+                ? "bg-[var(--muted)]"
                 : t === "invoices"
-                  ? "bg-white/60"
-                  : "bg-white/30";
+                  ? "bg-[var(--text)]"
+                  : "bg-[var(--muted-2)]";
 
             return (
               <li key={e.id} className="relative pl-9">
-                <span className="absolute left-0 top-1.5 grid h-6 w-6 place-items-center rounded-full border border-white/10 bg-[var(--app-bg)]">
+                <span className="absolute left-0 top-1.5 grid h-6 w-6 place-items-center rounded-full border border-[var(--border-soft)] bg-[var(--app-bg)]">
                   <span className={["h-2 w-2 rounded-full", dot].join(" ")} />
                 </span>
 
@@ -284,7 +284,7 @@ function Chip({ label, onClear }: { label: string; onClear: () => void }) {
       onClick={onClear}
       className={[
         "inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition",
-        "border border-white/10 bg-white/5 text-[var(--text)] hover:bg-white/10",
+        "border border-[var(--border-soft)] bg-[var(--surface-2)] text-[var(--text)] hover:bg-[var(--surface-hover)]",
       ].join(" ")}
       aria-label={`Clear filter: ${label}`}
     >

@@ -85,7 +85,7 @@ export function ProjectMetaEditor({
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+          className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
         />
       </Field>
 
@@ -93,7 +93,7 @@ export function ProjectMetaEditor({
         <input
           value={client}
           onChange={(e) => setClient(e.target.value)}
-          className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+          className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
         />
       </Field>
 
@@ -102,7 +102,7 @@ export function ProjectMetaEditor({
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
           placeholder="YYYY-MM-DD"
-          className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+          className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
         />
       </Field>
 
@@ -112,10 +112,10 @@ export function ProjectMetaEditor({
           onClick={onSave}
           disabled={!dirty || isPending}
           className={[
-            "rounded-md border border-white/10 px-3 py-2 text-sm transition",
+            "rounded-md border border-[var(--border-soft)] px-3 py-2 text-sm transition",
             !dirty || isPending
-              ? "bg-white/5 text-neutral-500"
-              : "bg-white/10 text-white hover:bg-white/15",
+              ? "bg-[var(--surface-2)] text-[var(--muted-2)]"
+              : "bg-[var(--surface-hover)] text-[var(--heading)] hover:bg-[var(--surface-hover)]",
           ].join(" ")}
         >
           Save changes
@@ -126,17 +126,17 @@ export function ProjectMetaEditor({
           onClick={onReset}
           disabled={isPending || Object.keys(edits).length === 0}
           className={[
-            "rounded-md border border-white/10 px-3 py-2 text-sm transition",
+            "rounded-md border border-[var(--border-soft)] px-3 py-2 text-sm transition",
             isPending || Object.keys(edits).length === 0
-              ? "bg-white/5 text-neutral-500"
-              : "bg-white/5 text-neutral-200 hover:bg-white/10",
+              ? "bg-[var(--surface-2)] text-[var(--muted-2)]"
+              : "bg-[var(--surface-2)] text-[var(--text)] hover:bg-[var(--surface-hover)]",
           ].join(" ")}
         >
           Reset
         </button>
 
         {!dirty ? (
-          <p className="self-center text-xs text-neutral-500">
+          <p className="self-center text-xs text-[var(--muted-2)]">
             Saved automatically in demo storage.
           </p>
         ) : null}
@@ -154,7 +154,7 @@ function Field({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="text-xs text-neutral-500">{label}</span>
+      <span className="text-xs text-[var(--muted-2)]">{label}</span>
       {children}
     </label>
   );

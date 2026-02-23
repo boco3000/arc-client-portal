@@ -80,9 +80,9 @@ export function InlineInvoiceStatusSelect({
           className={[
             "list-none cursor-pointer select-none",
             "grid h-8 w-8 place-items-center rounded-md",
-            "border border-white/10 bg-white/5 text-neutral-200",
-            "hover:bg-white/10",
-            "outline-none focus:ring-2 focus:ring-white/20",
+            "border border-[var(--border-soft)] bg-[var(--surface-2)] text-[var(--text)]",
+            "hover:bg-[var(--surface-hover)]",
+            "outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
             isPending ? "opacity-60 cursor-not-allowed" : "",
           ].join(" ")}
           onClick={(e) => {
@@ -97,7 +97,7 @@ export function InlineInvoiceStatusSelect({
           id={menuId}
           className={[
             "absolute right-0 z-20 mt-2 w-44 overflow-hidden rounded-lg",
-            "border border-white/10 bg-neutral-950 shadow-lg",
+            "border border-[var(--border-soft)] bg-[var(--surface-1)] shadow-lg",
           ].join(" ")}
           role="menu"
           aria-label="Invoice status options"
@@ -114,8 +114,8 @@ export function InlineInvoiceStatusSelect({
                 className={[
                   "block w-full text-left px-3 py-2 text-sm transition",
                   active
-                    ? "bg-white/10 text-white"
-                    : "text-neutral-200 hover:bg-white/5 hover:text-white",
+                    ? "bg-[var(--surface-hover)] text-[var(--heading)]"
+                    : "text-[var(--text)] hover:bg-[var(--surface-hover)] hover:text-[var(--heading)]",
                   "disabled:cursor-not-allowed disabled:opacity-60",
                 ].join(" ")}
                 role="menuitem"

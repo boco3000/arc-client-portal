@@ -36,12 +36,12 @@ export function InvoiceDetailClient({ id }: { id: string }) {
               fallback={invoice.status}
             />
           </div>
-          <p className="text-sm text-neutral-400">{invoice.client}</p>
+          <p className="text-sm text-[var(--muted)]">{invoice.client}</p>
         </div>
 
         <Link
           href="/invoices"
-          className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 hover:bg-white/10"
+          className="rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--heading)] hover:bg-[var(--surface-hover)]"
         >
           Back to Invoices
         </Link>
@@ -55,15 +55,15 @@ export function InvoiceDetailClient({ id }: { id: string }) {
             </CardHeader>
             <CardContent className="grid gap-2 text-sm">
               <div className="flex items-center justify-between gap-4">
-                <span className="text-xs text-neutral-500">Project</span>
+                <span className="text-xs text-[var(--muted-2)]">Project</span>
                 <div className="text-right">
                   <Link
                     href={`/projects/${invoice.projectId}`}
-                    className="text-sm text-neutral-200 underline-offset-4 hover:underline hover:text-white"
+                    className="text-sm text-[var(--text)] underline-offset-4 hover:underline hover:text-[var(--heading)]"
                   >
                     {project?.name ?? invoice.projectId}
                   </Link>
-                  <p className="text-xs text-neutral-500">
+                  <p className="text-xs text-[var(--muted-2)]">
                     {invoice.projectId}
                   </p>
                 </div>
@@ -129,8 +129,8 @@ export function InvoiceDetailClient({ id }: { id: string }) {
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-xs text-neutral-500">{label}</span>
-      <span className="text-sm text-neutral-200">{value}</span>
+      <span className="text-xs text-[var(--muted-2)]">{label}</span>
+      <span className="text-sm text-[var(--text)]">{value}</span>
     </div>
   );
 }

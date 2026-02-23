@@ -28,8 +28,8 @@ export function InvoiceDetailsPanel({
           aria-expanded={isEditing}
           className={[
             "grid h-9 w-9 place-items-center rounded-md",
-            "border border-white/10 bg-white/5 text-neutral-200",
-            "hover:bg-white/10 outline-none focus:ring-2 focus:ring-white/20",
+            "border border-[var(--border-soft)] bg-[var(--surface-2)] text-[var(--text)]",
+            "hover:bg-[var(--surface-hover)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
           ].join(" ")}
         >
           <span className="sr-only">{isEditing ? "Close editor" : "Edit invoice dates"}</span>
@@ -38,7 +38,7 @@ export function InvoiceDetailsPanel({
       </div>
 
       {isEditing ? (
-        <div className="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+        <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--surface-1)] p-3">
           <InvoiceMetaEditor
             invoiceId={invoiceId}
             projectId={projectId}
@@ -49,7 +49,7 @@ export function InvoiceDetailsPanel({
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-200 hover:bg-white/10"
+              className="rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] hover:bg-[var(--surface-hover)]"
             >
               Done
             </button>
@@ -63,8 +63,8 @@ export function InvoiceDetailsPanel({
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-xs text-neutral-500">{label}</span>
-      <span className="text-sm text-neutral-200">{value}</span>
+      <span className="text-xs text-[var(--muted-2)]">{label}</span>
+      <span className="text-sm text-[var(--text)]">{value}</span>
     </div>
   );
 }

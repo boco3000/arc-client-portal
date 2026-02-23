@@ -6,7 +6,7 @@ export default function SettingsPage() {
     <section className="space-y-6">
       <header className="space-y-1">
         <h2 className="text-xl font-semibold">Settings</h2>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-[var(--muted)]">
           Manage Arc demo data and local state.
         </p>
       </header>

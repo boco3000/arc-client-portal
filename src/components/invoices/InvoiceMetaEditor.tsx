@@ -54,7 +54,7 @@ export function InvoiceMetaEditor({
             value={issueDate}
             onChange={(e) => setIssueDate(e.target.value)}
             placeholder="YYYY-MM-DD"
-            className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+            className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
           />
         </Field>
 
@@ -63,7 +63,7 @@ export function InvoiceMetaEditor({
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             placeholder="YYYY-MM-DD"
-            className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+            className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
           />
         </Field>
       </div>
@@ -74,17 +74,17 @@ export function InvoiceMetaEditor({
           onClick={onSave}
           disabled={!dirty || isPending}
           className={[
-            "rounded-md border border-white/10 px-3 py-2 text-sm transition",
+            "rounded-md border border-[var(--border-soft)] px-3 py-2 text-sm transition",
             !dirty || isPending
-              ? "bg-white/5 text-neutral-500"
-              : "bg-white/10 text-white hover:bg-white/15",
+              ? "bg-[var(--surface-2)] text-[var(--muted-2)]"
+              : "bg-[var(--surface-hover)] text-[var(--heading)] hover:bg-[var(--surface-hover)]",
           ].join(" ")}
         >
           Save dates
         </button>
 
         {!dirty ? (
-          <span className="text-xs text-neutral-500">No unsaved changes.</span>
+          <span className="text-xs text-[var(--muted-2)]">No unsaved changes.</span>
         ) : null}
       </div>
     </div>
@@ -100,7 +100,7 @@ function Field({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="text-xs text-neutral-500">{label}</span>
+      <span className="text-xs text-[var(--muted-2)]">{label}</span>
       {children}
     </label>
   );

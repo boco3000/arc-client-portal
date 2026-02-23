@@ -13,30 +13,30 @@ export function ProjectActivity({ projectId }: { projectId: string }) {
   const activity = getActivity(projectId);
 
   if (activity.length === 0) {
-    return <p className="text-sm text-neutral-400">No activity yet.</p>;
+    return <p className="text-sm text-[var(--muted)]">No activity yet.</p>;
   }
 
   return (
     <ol className="relative space-y-6">
       {/* rail */}
-      <div className="pointer-events-none absolute left-[11px] top-2 h-[calc(100%-8px)] w-px bg-white/10" />
+      <div className="pointer-events-none absolute left-[11px] top-2 h-[calc(100%-8px)] w-px bg-[var(--border-soft)]" />
 
       {activity.map((e) => (
         <li key={e.id} className="relative pl-9">
           {/* dot */}
-          <span className="absolute left-0 top-1.5 grid h-6 w-6 place-items-center rounded-full border border-white/10 bg-neutral-950">
-            <span className="h-2 w-2 rounded-full bg-white/40" />
+          <span className="absolute left-0 top-1.5 grid h-6 w-6 place-items-center rounded-full border border-[var(--border-soft)] bg-[var(--surface-1)]">
+            <span className="h-2 w-2 rounded-full bg-[var(--muted)]" />
           </span>
 
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-sm text-neutral-100">{e.title}</p>
+              <p className="text-sm text-[var(--text)]">{e.title}</p>
               {e.meta ? (
-                <p className="mt-0.5 text-xs text-neutral-500">{e.meta}</p>
+                <p className="mt-0.5 text-xs text-[var(--muted-2)]">{e.meta}</p>
               ) : null}
             </div>
 
-            <time className="shrink-0 text-xs text-neutral-500">
+            <time className="shrink-0 text-xs text-[var(--muted-2)]">
               {formatDate(e.date)}
             </time>
           </div>

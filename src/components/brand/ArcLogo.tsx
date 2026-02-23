@@ -15,7 +15,7 @@ export function ArcLogo({
       className={[
         "group inline-flex items-center gap-3 rounded-lg px-1 py-1",
         "transition-[transform,background-color,opacity] duration-150 ease-out",
-        "hover:bg-white/[0.04] hover:-translate-y-[1px]",
+        "hover:bg-[var(--surface-hover)] hover:-translate-y-[1px]",
         "active:translate-y-0",
         "outline-none focus-visible:bg-white/[0.06]",
       ].join(" ")}

@@ -72,7 +72,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={[
-        "inline-flex items-center rounded-md border border-white/10 px-2 py-1 text-xs",
+        "inline-flex items-center rounded-md border border-[var(--border-soft)] px-2 py-1 text-xs",
         styles,
       ].join(" ")}
     >

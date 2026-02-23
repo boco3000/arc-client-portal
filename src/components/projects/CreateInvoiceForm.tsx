@@ -80,21 +80,21 @@ export function CreateInvoiceForm({
         placeholder="Description"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm"
+        className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm"
       />
 
       <input
         placeholder="Amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm"
+        className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm"
       />
 
       <button
         type="button"
         onClick={onCreate}
         disabled={isPending}
-        className="w-full rounded-md border border-white/10 bg-white/10 px-3 py-2 text-sm hover:bg-white/15"
+        className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-hover)] px-3 py-2 text-sm hover:bg-[var(--surface-hover)]"
       >
         Create invoice
       </button>

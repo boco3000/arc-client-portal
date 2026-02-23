@@ -94,8 +94,8 @@ export function InvoiceLineItemsEditor({
     <div className="space-y-3">
       <div className="-mx-2 overflow-x-auto px-2">
         <table className="w-full text-sm">
-          <thead className="text-left text-neutral-400">
-            <tr className="border-b border-white/10">
+          <thead className="text-left text-[var(--muted)]">
+            <tr className="border-b border-[var(--border-soft)]">
               <th className="py-2 pr-3 font-medium">Description</th>
               <th className="py-2 pr-3 font-medium w-24">Qty</th>
               <th className="py-2 pr-3 font-medium w-32">Rate</th>
@@ -109,14 +109,14 @@ export function InvoiceLineItemsEditor({
               const amount = it.quantity * it.rate;
 
               return (
-                <tr key={it.id} className="border-b border-white/5 align-top">
+                <tr key={it.id} className="border-b border-[var(--border-soft)] align-top">
                   <td className="py-2 pr-3">
                     <input
                       value={it.description}
                       onChange={(e) =>
                         setItem(it.id, { description: e.target.value })
                       }
-                      className="w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+                      className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-2 py-1.5 text-sm text-[var(--text)] outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-[var(--border)]"
                     />
                   </td>
 
@@ -130,7 +130,7 @@ export function InvoiceLineItemsEditor({
                           quantity: Number.isFinite(next) ? next : 0,
                         });
                       }}
-                      className="w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+                      className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-2 py-1.5 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
                     />
                   </td>
 
@@ -142,11 +142,11 @@ export function InvoiceLineItemsEditor({
                         setItem(it.id, { rate: parseMoney(e.target.value) })
                       }
                       placeholder="0.00"
-                      className="w-full rounded-md border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-neutral-100 outline-none focus:ring-2 focus:ring-white/20"
+                      className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-2 py-1.5 text-sm text-[var(--text)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
                     />
                   </td>
 
-                  <td className="py-2 pr-3 text-neutral-200">
+                  <td className="py-2 pr-3 text-[var(--text)]">
                     {money(amount)}
                   </td>
 
@@ -154,7 +154,7 @@ export function InvoiceLineItemsEditor({
                     <button
                       type="button"
                       onClick={() => removeItem(it.id)}
-                      className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-neutral-200 hover:bg-white/10"
+                      className="rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-2 py-1 text-xs text-[var(--text)] hover:bg-[var(--surface-hover)]"
                       aria-label="Remove line item"
                     >
                       ×
@@ -171,12 +171,12 @@ export function InvoiceLineItemsEditor({
         <button
           type="button"
           onClick={addItem}
-          className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-200 hover:bg-white/10"
+          className="rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text)] hover:bg-[var(--border-soft)]"
         >
           Add line item
         </button>
 
-        <div className="text-sm text-neutral-200">
+        <div className="text-sm text-[var(--text)]">
           Total: <span className="font-semibold">{money(subtotal)}</span>
         </div>
       </div>
@@ -187,17 +187,17 @@ export function InvoiceLineItemsEditor({
           onClick={onSave}
           disabled={!dirty || isPending}
           className={[
-            "rounded-md border border-white/10 px-3 py-2 text-sm transition",
+            "rounded-md border border-[var(--border-soft)] px-3 py-2 text-sm transition",
             !dirty || isPending
-              ? "bg-white/5 text-neutral-500"
-              : "bg-white/10 text-white hover:bg-white/15",
+              ? "bg-[var(--surface-2)] text-[var(--muted-2)]"
+              : "bg-[var(--surface-hover)] text-[var(--heading)] hover:bg-[var(--surface-hover)]",
           ].join(" ")}
         >
           Save line items
         </button>
 
         {!dirty ? (
-          <span className="text-xs text-neutral-500">No changes.</span>
+          <span className="text-xs text-[var(--muted-2)]">No changes.</span>
         ) : null}
       </div>
     </div>

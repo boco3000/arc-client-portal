@@ -41,7 +41,7 @@ export function ProjectNotes({ projectId }: { projectId: string }) {
   return (
     <div className="space-y-4">
       {/* Composer */}
-      <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+      <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)] p-3">
         <div className="space-y-2">
           <label className="block">
             <span className="sr-only">Note title</span>
@@ -49,7 +49,7 @@ export function ProjectNotes({ projectId }: { projectId: string }) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Note title…"
-              className="w-full rounded-md border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full rounded-md border border-[var(--border-soft)] bg-[var(--surface-1)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
             />
           </label>
 
@@ -60,12 +60,12 @@ export function ProjectNotes({ projectId }: { projectId: string }) {
               onChange={(e) => setBody(e.target.value)}
               placeholder="Write an update, decision, or client request…"
               rows={4}
-              className="w-full resize-none rounded-md border border-white/10 bg-neutral-950 px-3 py-2 text-sm text-neutral-100 placeholder:text-neutral-500 outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full resize-none rounded-md border border-[var(--border-soft)] bg-[var(--surface-1)] px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--muted-2)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]"
             />
           </label>
 
           <div className="flex items-center justify-between">
-            <p className="text-xs text-neutral-500">
+            <p className="text-xs text-[var(--muted-2)]">
               Saved locally (mock portal state).
             </p>
 
@@ -74,10 +74,10 @@ export function ProjectNotes({ projectId }: { projectId: string }) {
               onClick={onAddNote}
               disabled={!canSave}
               className={[
-                "rounded-md border border-white/10 px-3 py-2 text-sm transition",
+                "rounded-md border border-[var(--border-soft)] px-3 py-2 text-sm transition",
                 canSave
-                  ? "bg-white/10 text-white hover:bg-white/15"
-                  : "bg-white/5 text-neutral-500",
+                  ? "bg-[var(--surface-hover)] text-[var(--heading)] hover:bg-[var(--surface-hover)]"
+                  : "bg-[var(--surface-2)] text-[var(--muted-2)]",
                 "disabled:cursor-not-allowed",
               ].join(" ")}
             >
@@ -89,19 +89,19 @@ export function ProjectNotes({ projectId }: { projectId: string }) {
 
       {/* Notes list */}
       {notes.length === 0 ? (
-        <p className="text-sm text-neutral-400">No notes yet.</p>
+        <p className="text-sm text-[var(--muted)]">No notes yet.</p>
       ) : (
         <ul className="space-y-3">
           {notes.map((n) => (
-            <li key={n.id} className="rounded-lg border border-white/10 p-3">
+            <li key={n.id} className="rounded-lg border border-[var(--border-soft)] p-3">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-neutral-100">{n.title}</p>
-                  <p className="mt-1 whitespace-pre-wrap text-sm text-neutral-300">
+                  <p className="text-sm font-medium text-[var(--heading)]">{n.title}</p>
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--muted)]">
                     {n.body}
                   </p>
                 </div>
-                <p className="shrink-0 text-xs text-neutral-500">{n.date}</p>
+                <p className="shrink-0 text-xs text-[var(--muted-2)]">{n.date}</p>
               </div>
             </li>
           ))}

@@ -37,8 +37,8 @@ function stylesFor(status: ProjectStatus) {
       };
     default:
       return {
-        active: "border-white/20 bg-white/10 text-white",
-        idle: "border-white/10 text-neutral-200 hover:bg-white/5",
+        active: "border-[var(--border)] bg-[var(--surface-hover)] text-[var(--heading)]",
+        idle: "border-[var(--border-soft)] text-[var(--text)] hover:bg-[var(--surface-hover)]",
       };
   }
 }
@@ -96,7 +96,7 @@ export function ProjectActions({
             aria-pressed={isActive}
             className={[
               "w-full rounded-md border px-3 py-2 text-sm transition",
-              "outline-none focus:ring-2 focus:ring-white/20",
+              "outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
               variant,
               disabled ? "cursor-not-allowed opacity-70" : "",
             ].join(" ")}

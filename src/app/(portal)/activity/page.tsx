@@ -22,7 +22,7 @@ export default async function ActivityPage({ searchParams }: PageProps) {
     <section className="space-y-6">
       <header className="space-y-1">
         <h2 className="text-xl font-semibold">Activity</h2>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-[var(--muted)]">
           System-wide timeline across projects, notes, and invoices.
         </p>
       </header>

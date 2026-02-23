@@ -22,7 +22,7 @@ export function ProjectInvoices({ projectId }: { projectId: string }) {
       </CardHeader>
       <CardContent>
         {rows.length === 0 ? (
-          <p className="text-sm text-neutral-400">No invoices for this project.</p>
+          <p className="text-sm text-[var(--muted)]">No invoices for this project.</p>
         ) : (
           <ul className="space-y-2">
             {rows.map((inv) => {
@@ -32,15 +32,15 @@ export function ProjectInvoices({ projectId }: { projectId: string }) {
                   <div className="min-w-0">
                     <Link
                       href={`/invoices/${inv.id}`}
-                      className="text-sm text-neutral-200 underline-offset-4 hover:underline hover:text-white"
+                      className="text-sm text-[var(--text)] underline-offset-4 hover:underline hover:text-[var(--heading)]"
                     >
                       {inv.id}
                     </Link>
-                    <p className="mt-0.5 text-xs text-neutral-500">
+                    <p className="mt-0.5 text-xs text-[var(--muted-2)]">
                       Due {inv.dueDate} • {inv.status}
                     </p>
                   </div>
-                  <p className="shrink-0 text-sm text-neutral-200">{money(amt)}</p>
+                  <p className="shrink-0 text-sm text-[var(--text)]">{money(amt)}</p>
                 </li>
               );
             })}
@@ -50,7 +50,7 @@ export function ProjectInvoices({ projectId }: { projectId: string }) {
         <div className="mt-4">
           <Link
             href={`/invoices?project=${projectId}`}
-            className="inline-flex items-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100 hover:bg-white/10"
+            className="inline-flex items-center rounded-md border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--heading)] hover:bg-[var(--surface-hover)]"
           >
             View all invoices
           </Link>
