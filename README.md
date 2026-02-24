@@ -5,12 +5,6 @@
 <h1 align="center">Arc Dashboard</h1>
 
 <p align="center">
-  <img src="./docs/arc-banner.png" alt="Arc Dashboard banner" width="100%" />
-</p>
-
-<h1 align="center">Arc</h1>
-
-<p align="center">
   <strong>Clarity, control, and momentum in one streamlined workspace.</strong>
 </p>
 
@@ -31,7 +25,7 @@
 ## ✦ Live Preview
 
 ```
-https://arc-dashboard.vercel.app
+https://arc-client-portal-delta.vercel.app/dashboard
 ```
 
 ---
