@@ -1,6 +1,13 @@
 "use client";
 
-import { useId, useRef, useState, useTransition } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter } from "next/navigation";
 import type { ProjectStatus } from "@/data/projects";
 import { usePortalState } from "@/components/portal/PortalStateProvider";
@@ -31,17 +38,57 @@ export function InlineStatusSelect({
   const { setStatus, addActivity } = usePortalState();
   const [isPending, startTransition] = useTransition();
 
-  const detailsRef = useRef<HTMLDetailsElement | null>(null);
-  const [saved, setSaved] = useState(false);
   const menuId = useId();
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
-  function closeMenu() {
-    if (detailsRef.current) detailsRef.current.open = false;
-  }
+  const [open, setOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  // Close if another menu opens
+  useEffect(() => {
+    function onOtherOpen(e: Event) {
+      const ev = e as CustomEvent<{ id: string }>;
+      if (ev.detail?.id && ev.detail.id !== menuId) setOpen(false);
+    }
+    window.addEventListener(
+      "arc:inline-menu-open",
+      onOtherOpen as EventListener,
+    );
+    return () =>
+      window.removeEventListener(
+        "arc:inline-menu-open",
+        onOtherOpen as EventListener,
+      );
+  }, [menuId]);
+
+  // Close on outside click + Escape
+  useEffect(() => {
+    if (!open) return;
+
+    function onDocMouseDown(e: MouseEvent) {
+      const el = rootRef.current;
+      if (!el) return;
+      if (e.target instanceof Node && !el.contains(e.target)) setOpen(false);
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("mousedown", onDocMouseDown);
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", onDocMouseDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  const items = useMemo(() => options, []);
 
   function onChange(next: ProjectStatus) {
     if (next === value) {
-      closeMenu();
+      setOpen(false);
       return;
     }
 
@@ -56,80 +103,112 @@ export function InlineStatusSelect({
         date: new Date().toISOString().slice(0, 10),
       });
 
-      void updateProjectStatusAction({ id: projectId, status: next }).then(() => {
-        router.refresh();
-        setSaved(true);
-        window.setTimeout(() => setSaved(false), 1200);
-      });
+      void updateProjectStatusAction({ id: projectId, status: next }).then(
+        () => {
+          router.refresh();
+          setSaved(true);
+          window.setTimeout(() => setSaved(false), 1200);
+        },
+      );
     });
 
-    closeMenu();
+    setOpen(false);
   }
 
   return (
-    <div className={["relative inline-flex items-center gap-2", className ?? ""].join(" ")}>
-      {saved ? <span className="text-xs text-emerald-200">Saved ✓</span> : null}
+    <div
+      ref={rootRef}
+      className={[
+        "relative inline-flex items-center gap-2",
+        className ?? "",
+      ].join(" ")}
+    >
+      {saved ? (
+        <span className="text-xs text-emerald-700 dark:text-emerald-200">
+          Saved ✓
+        </span>
+      ) : null}
 
-      <details ref={detailsRef} className="relative">
-        <summary
-          aria-label={`Edit status (currently ${labelFor(value)})`}
-          aria-controls={menuId}
-          className={[
-            "list-none cursor-pointer select-none",
-            "grid h-8 w-8 place-items-center rounded-md",
-            "border border-[var(--border-soft)] bg-[var(--surface-2)] text-[var(--text)]",
-            "hover:bg-[var(--surface-hover)]",
-            "outline-none focus-visible:ring-2 focus-visible:ring-[var(--border)]",
-            "disabled:cursor-not-allowed",
-            isPending ? "opacity-60 cursor-not-allowed" : "",
-          ].join(" ")}
-          onClick={(e) => {
-            if (isPending) e.preventDefault();
-          }}
-        >
-          <span className="sr-only">Edit status</span>
-          <IconDots />
-        </summary>
+      <button
+        type="button"
+        aria-label={`Edit status (currently ${labelFor(value)})`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => {
+          if (isPending) return;
+          setOpen((v) => {
+            const next = !v;
 
+            if (next) {
+              // Dispatch async so other menus close AFTER React commits this update
+              window.setTimeout(() => {
+                window.dispatchEvent(
+                  new CustomEvent("arc:inline-menu-open", {
+                    detail: { id: menuId },
+                  }),
+                );
+              }, 0);
+            }
+
+            return next;
+          });
+        }}
+        className={[
+          "grid h-8 w-8 place-items-center rounded-md",
+          "border border-[var(--border-soft)] bg-[var(--surface-2)] text-[var(--text)]",
+          "hover:bg-[var(--surface-hover)]",
+          "transition outline-none",
+          "focus-visible:ring-2 focus-visible:ring-[var(--border)]",
+          isPending ? "opacity-60 cursor-not-allowed" : "",
+        ].join(" ")}
+      >
+        <span className="sr-only">Edit status</span>
+        <IconDots />
+      </button>
+
+      {open ? (
         <div
-          id={menuId}
-          className={[
-            "absolute right-0 z-20 mt-2 w-44 overflow-hidden rounded-lg",
-            "border border-[var(--border-soft)] bg-[var(--surface-1)] shadow-lg",
-          ].join(" ")}
           role="menu"
           aria-label="Status options"
+          className={[
+            "absolute right-0 top-full mt-2 z-[60]",
+            "w-56 rounded-lg border border-[var(--border-soft)]",
+            "bg-[var(--panel-bg)] shadow-lg",
+            "p-1",
+          ].join(" ")}
         >
-          {options.map((o) => {
+          {items.map((o) => {
             const active = o.value === value;
+            const disabled = isPending || active;
 
             return (
               <button
                 key={o.value}
                 type="button"
                 onClick={() => onChange(o.value)}
-                disabled={isPending || active}
+                disabled={disabled}
+                role="menuitem"
                 className={[
-                  "block w-full text-left px-3 py-2 text-sm transition",
+                  "block w-full rounded-md px-3 py-2 text-left text-sm",
+                  "transition outline-none",
+                  "focus-visible:ring-2 focus-visible:ring-[var(--border)]",
                   active
                     ? "bg-[var(--surface-hover)] text-[var(--heading)]"
                     : "text-[var(--text)] hover:bg-[var(--surface-hover)] hover:text-[var(--heading)]",
                   "disabled:cursor-not-allowed disabled:opacity-60",
                 ].join(" ")}
-                role="menuitem"
               >
                 {o.label}
               </button>
             );
           })}
         </div>
-      </details>
+      ) : null}
     </div>
   );
 }
 
 function IconDots() {
-  // 3-dots icon (no library)
   return (
     <svg
       width="16"

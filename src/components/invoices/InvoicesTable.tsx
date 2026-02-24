@@ -118,9 +118,11 @@ export function InvoicesTable({
           )}
         />
       </div>
-      <p className="text-xs text-[var(--muted-2)]">{visible.length} result(s)</p>
+      <p className="text-xs text-[var(--muted-2)]">
+        {visible.length} result(s)
+      </p>
 
-      <div className="-mx-2 overflow-x-auto px-2">
+      <div className="-mx-2 overflow-x-auto overflow-y-visible px-2">
         <table className="w-full text-sm">
           <thead className="text-left text-[var(--muted)]">
             <tr className="border-b border-[var(--border-soft)]">
@@ -139,7 +141,7 @@ export function InvoicesTable({
                 key={inv.id}
                 className="group border-b border-[var(--border-soft)] hover:bg-[var(--surface-1)]"
               >
-                <td className="py-3 pr-4">
+                <td className="relative py-3 pr-4">
                   <Link
                     href={`/invoices/${inv.id}`}
                     className="block rounded-sm text-[var(--text)] underline-offset-4 hover:underline hover:text-[var(--heading)] outline-none focus:ring-2 focus:ring-[var(--border)]"
@@ -148,7 +150,7 @@ export function InvoicesTable({
                   </Link>
                 </td>
                 <td className="py-3 pr-4 text-[var(--muted)]">{inv.client}</td>
-                <td className="py-3 pr-4">
+                <td className="relative py-3 pr-4">
                   <div className="flex items-center gap-2">
                     <StatusPill
                       variant="invoice"
@@ -159,11 +161,6 @@ export function InvoicesTable({
                       invoiceId={inv.id}
                       projectId={inv.projectId}
                       value={inv.effectiveStatus}
-                      className={[
-                        "opacity-0 transition",
-                        "group-hover:opacity-100",
-                        "focus-within:opacity-100",
-                      ].join(" ")}
                     />
                   </div>
                 </td>
@@ -194,7 +191,9 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-[var(--border-soft)] bg-[var(--surface-2)] p-3">
       <p className="text-xs text-[var(--muted-2)]">{label}</p>
-      <p className="mt-1 text-lg font-semibold text-[var(--heading)]">{value}</p>
+      <p className="mt-1 text-lg font-semibold text-[var(--heading)]">
+        {value}
+      </p>
     </div>
   );
 }

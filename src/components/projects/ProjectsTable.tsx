@@ -74,7 +74,7 @@ export function ProjectsTable({
     <div className="space-y-3">
       <p className="text-xs text-[var(--muted-2)]">{visible.length} result(s)</p>
 
-      <div className="-mx-2 overflow-x-auto px-2">
+      <div className="-mx-2 overflow-x-auto overflow-y-visible px-2">
         <table className="w-full text-sm">
           <thead className="text-left text-[var(--muted)]">
             <tr className="border-b border-[var(--border-soft)]">
